@@ -1,0 +1,21 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<h1>Sign In</h1>
+<form action="" method="post" name="login">
+    <meta name="google-signin-client_id" content="816133133391-pn148oe0c79uicvfhphtsgfp7o2fhhfn.apps.googleusercontent.com
+">
+    {{form.hidden_tag()}}  <!--facilitate csrf-->
+    <p>
+        Please enter your OpenID:<br>
+        {{form.openid(size=80)}}<br>
+        {% for error in form.openid.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </p>
+    <p>{{form.remember_me}} Remember Me</p>
+    <p><input type="submit" name="" value="Sign In"></p>
+</form>
+{% endblock content %}h1

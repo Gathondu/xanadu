@@ -1,7 +1,10 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+xanadu = Flask(__name__)
+xanadu.config.from_object('settings')
+db = SQLAlchemy(xanadu)
 
 # import views here to avoid circular references.
-# views needs to import our app
-from app import views
+# views needs to import our app (xanadu)
+from app import views, models
