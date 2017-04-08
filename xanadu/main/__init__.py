@@ -1,6 +1,6 @@
 '''
 Create a blueprint for the app so as to register its routes in the
-dynamically created app
+app created by the factory function
 '''
 from flask import Blueprint
 
