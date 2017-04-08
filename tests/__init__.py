@@ -23,7 +23,8 @@ class BaseTestCase(unittest.TestCase):
             last_name='gathondu',
             nickname='dng',
             email='thundoss@gmail.com',
-            password='denno'
+            password='denno',
+            created_at=datetime.utcnow()
         )
         self.item = Item(
             title='my first vacation',
