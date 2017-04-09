@@ -8,7 +8,7 @@ from xanadu import db
 from xanadu.models import User, Item
 
 
-class TestUser(BaseTestCase):
+class UserTestCase(BaseTestCase):
     '''
     Test the user model
     '''
@@ -19,15 +19,12 @@ class TestUser(BaseTestCase):
             db.session.commit()
 
     def test_user_is_saved(self):
-        db.session.add(self.user)
-        db.session.commit()
         self.assertIsNotNone(User.query.filter_by(nickname='dng').first())
 
     def test_user_cannot_be_duplicated(self):
         db.session.add(self.user)
-        db.session.add(self.user)
         db.session.commit()
-        self.assertEqual(1, len(User.query.all()))
+        self.assertEqual(2, len(User.query.all()))
 
     def test_password_setter(self):
         self.assertIsNotNone(self.user.password_hash)
@@ -41,24 +38,18 @@ class TestUser(BaseTestCase):
         self.assertFalse(self.user.verify_password('password'))
 
     def test_passwords_are_random(self):
-        test_user = User(password='denno')
-        self.assertNotEqual(test_user.password_hash, self.user.password_hash)
+        self.assertNotEqual(self.user.password_hash, self.user2.password_hash)
 
     def test_user_has_items_in_list(self):
-        db.session.add(self.user)
-        db.session.add(self.item)
-        db.session.commit()
-        self.assertIsNotNone(Item.query.filter_by(author=self.user).first())
+        self.assertIsNotNone(Item.query.filter_by(author=self.user).all())
 
 
-class TestItem(BaseTestCase):
+class ItemTestCase(BaseTestCase):
     '''
     Test the list items
     '''
     def test_item_is_saved(self):
-        db.session.add(self.item)
-        db.session.commit()
-        self.assertIsNotNone(Item.query.filter_by(author=self.user).all())
+        self.assertIsNotNone(Item.query.all())
 
     def test_item_must_have_an_title(self):
         item = Item()
@@ -67,7 +58,5 @@ class TestItem(BaseTestCase):
             db.session.commit()
 
     def test_a_list_item_has_only_one_author(self):
-        db.session.add(self.item)
-        db.session.commit()
-        item = Item.query.filter_by(title='my first vacation').first()
-        self.assertEqual('dng', item.author.nickname)
+        item = Item.query.filter_by(title='my first vacation').all()
+        self.assertEqual(1, len(item))

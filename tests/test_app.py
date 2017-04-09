@@ -1,11 +1,11 @@
 '''
-Test the application instance
+Test the factory function
 '''
 from flask import current_app
 from tests import BaseTestCase
 
 
-class TestApp(BaseTestCase):
+class AppTestCase(BaseTestCase):
     '''
     Tests for the app instance
     '''
