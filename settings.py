@@ -48,9 +48,25 @@ class ProductionConfig(Config):
     database = 'sqlite:///' + os.path.join(BASE_DIR, 'xanadu.sqlite')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', database)
 
+
+class HerokuConfig(ProductionConfig):
+    '''Heroku settings'''
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+
+        # log to stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
+
+
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'heroku': HerokuConfig,
     'default': DevelopmentConfig
 }
