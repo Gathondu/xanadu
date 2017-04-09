@@ -1,1 +1,1 @@
-web gunicorn manage:xanadu --log-file-
+web gunicorn manage:xanadu
