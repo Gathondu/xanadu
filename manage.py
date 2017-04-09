@@ -58,5 +58,13 @@ def dropdb():
     '''drop the database'''
     db.drop_all()
 
+
+@manager.command
+def deploy():
+    '''run deployment tasks'''
+    from flask_migrate import upgrade
+
+    upgrade()
+
 if __name__ == '__main__':
     manager.run()
