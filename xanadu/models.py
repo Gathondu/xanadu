@@ -55,4 +55,5 @@ class Item(db.Model):
 # class BucketList(db.Model):
 #     '''bucketlist model'''
 #     __tablename__ = 'bucketlist'
-#     id = db.Column()
+    # id = db.Column()
+    # title = db.Column(db.String(20), nullable=False)
