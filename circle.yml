@@ -1,6 +1,6 @@
 machine:
   python:
-    version: 3.5.2
+    version: 3.6.1
 environment:
   FLASK_CONFIG: 'testing'
 dependencies:
@@ -12,8 +12,5 @@ test:
 deployment:
   staging:
     branch: develop
-    commands:
-      - git fetch origin
-      - git push git@heroku.com:xanadu-bucketlist.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run python manage.py deploy --app xanadu-bucketlist
-      - heroku ps:scale web=1 --app xanadu-bucketlist
+    heroku:
+      appname: xanadu-bucketlist
