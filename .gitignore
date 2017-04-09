@@ -92,3 +92,6 @@ ENV/
 # sqlite db
 *.db
 *.sqlite
+
+# ignore files in the tmp folder
+tmp/
