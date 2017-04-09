@@ -12,9 +12,11 @@ test:
 deployment:
   staging:
     branch: develop
-    commands:
-      - git fetch origin
-      - git push git@heroku.com:xanadu-bucketlist.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run python manage.py db migrate --app xanadu-bucketlist
-      - heroku run python manage.py db upgrade --app xanadu-bucketlist
-      - heroku ps:scale web=1 --app xanadu-bucketlist --app xanadu-bucketlist
+    heroku:
+      appname: xanadu-bucketlist
+      commands:
+        - git fetch origin
+        - git push git@heroku.com:xanadu-bucketlist.git $CIRCLE_SHA1:refs/heads/master
+        - heroku run python manage.py db migrate
+        - heroku run python manage.py db upgrade
+        - heroku ps:scale web=1 
