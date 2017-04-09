@@ -8,7 +8,7 @@ from xanadu import db
 from xanadu.models import User, Item
 
 
-class TestUser(BaseTestCase):
+class UserTestCase(BaseTestCase):
     '''
     Test the user model
     '''
@@ -44,7 +44,7 @@ class TestUser(BaseTestCase):
         self.assertIsNotNone(Item.query.filter_by(author=self.user).all())
 
 
-class TestItem(BaseTestCase):
+class ItemTestCase(BaseTestCase):
     '''
     Test the list items
     '''

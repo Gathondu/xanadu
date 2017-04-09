@@ -6,6 +6,7 @@ from . import login_manager
 
 
 class User(UserMixin, db.Model):
+    '''user model'''
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), index=True, nullable=False)
@@ -38,6 +39,7 @@ def load_user(user_id):
 
 
 class Item(db.Model):
+    '''item model'''
     __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(20), nullable=False)
@@ -48,3 +50,9 @@ class Item(db.Model):
 
     def __repr__(self):
         return '<ListItem {}>'.format(self.title)
+
+
+# class BucketList(db.Model):
+#     '''bucketlist model'''
+#     __tablename__ = 'bucketlist'
+#     id = db.Column()

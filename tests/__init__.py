@@ -24,16 +24,14 @@ class BaseTestCase(unittest.TestCase):
             last_name='gathondu',
             nickname='dng',
             email='thundoss@gmail.com',
-            password='denno',
-            created_at=datetime.utcnow()
+            password='denno'
         )
         self.user2 = User(
             first_name='denis',
             last_name='gathondu',
             nickname='dngathondu',
             email='thundos@yahoo.com',
-            password='denno',
-            created_at=datetime.utcnow()
+            password='denno'
         )
         self.item = Item(
             title='my first vacation',
