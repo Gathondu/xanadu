@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+/.gtm/
+
+# sqlite db
+*.db
+*.sqlite
+
+# ignore files in the tmp folder
+tmp/
