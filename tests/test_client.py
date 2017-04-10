@@ -25,7 +25,8 @@ class ClientTestCase(BaseTestCase):
             'last_name': 'miti',
             'nickname': 'miti',
             'email': 'example@gmail.com',
-            'password': 'dan'
+            'password': 'dan',
+            'created_at': datetime.utcnow()
         }, follow_redirects=True)
         self.assertEqual(302, response.status_code)
 

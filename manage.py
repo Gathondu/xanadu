@@ -5,7 +5,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
 from xanadu import create_app, db
-from xanadu.models import User, Item
+from xanadu.models import User, BucketList, Item
 
 
 xanadu = create_app(os.getenv('FLASK_CONFIG', 'default'))
@@ -18,7 +18,8 @@ migrate = Migrate(xanadu, db)
 # shell commands logic
 def make_shell_context():
     '''Add imports that will be existent in the shell'''
-    return dict(xanadu=xanadu, db=db, User=User, Item=Item)
+    return dict(
+        xanadu=xanadu, db=db, User=User, BucketList=BucketList, Item=Item)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -27,7 +28,7 @@ manager.add_command('db', MigrateCommand)
 COV = None
 if os.getenv('FLASK_COVERAGE'):
     import coverage
-    COV = coverage.coverage(branch=True, include='xanadu/*')
+    COV = coverage.coverage(branch=True, source=['xanadu'], omit=['*/tests/*'])
     COV.start()
 
 
