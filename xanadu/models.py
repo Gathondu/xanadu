@@ -1,10 +1,13 @@
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 from flask_login import UserMixin
-from xanadu import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from xanadu import db
 from . import login_manager
 
-
+# UserMixin has implementation of is_authenticated, is_active,
+# is_anonymous and get_id()
 class User(UserMixin, db.Model):
     '''user model'''
     __tablename__ = 'users'
@@ -15,6 +18,7 @@ class User(UserMixin, db.Model):
         db.String(60), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    confirmed = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, nullable=False)
     bucketlist = db.relationship('BucketList', back_populates='author')
     items = db.relationship('Item', back_populates='author')
@@ -33,7 +37,25 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def generate_confirmation_token(self, expiration=3600):
+        '''generate a token for user authentication valid for an hour'''
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id})
 
+    def confirm(self, token):
+        '''confirm token provided by the user'''
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
+
+# helper function for the login manager
 @login_manager.user_loader
 def load_user(user_id):
     '''user loader callback function'''

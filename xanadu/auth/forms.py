@@ -24,7 +24,7 @@ class RegistrationForm(FlaskForm):
             'Names must only have letters, numbers, dots or underscores')])
     # nickname = StringField('{}'.format(first_name.value+' '+last_name),
     #                        default=first_name+' '+last_name)
-    nickname = StringField('Username')
+    nickname = StringField('Username', validators=[Required()])
     email = StringField('Email', validators=[Required(), Email(),
                                              Length(1, 64)])
     password = PasswordField('Password', validators=[
@@ -37,9 +37,5 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Email already registered')
 
     def validate_nickname(self, field):
-        if not field.data:
-            nickname = self.first_name.data+' '+self.last_name.data
-            if User.query.filter_by(nickname=nickname).first():
-                raise ValidationError('You must define a username')
         if User.query.filter_by(nickname=field.data).first():
             raise ValidationError('Username already in use.')

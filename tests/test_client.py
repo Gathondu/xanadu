@@ -11,7 +11,7 @@ from xanadu.models import User
 from tests import BaseTestCase
 
 
-@skip('WIP')
+# @skip('WIP')
 class ClientTestCase(BaseTestCase):
     '''Test the client instance'''
     def test_app_client(self):
@@ -25,12 +25,19 @@ class ClientTestCase(BaseTestCase):
             'last_name': 'miti',
             'nickname': 'miti',
             'email': 'example@gmail.com',
-            'password': 'dan',
-            'created_at': datetime.utcnow()
+            'password': 'dan'
         }, follow_redirects=True)
         self.assertEqual(302, response.status_code)
 
-    def test_login(self):
+        '''test that a confirmation token is sent to the user'''
+        user = User.query.filter_by(email='example@gmail.com').first()
+        import pdb; pdb.set_trace()
+        token = user.generate_confirmation_token()
+        response = self.client.get(url_for('auth.confirm', token=token),
+                                   follow_redirects=True)
+        data = response.get_data(as_text=True)
+        self.assertIn('You have confirmed your account', data)
+
         '''test the loggin in of a registered user'''
         response = self.client.post(url_for('auth.login'), data={
             'email': 'example@gmail.com',
@@ -39,16 +46,6 @@ class ClientTestCase(BaseTestCase):
         data = response.get_data(as_text=True)
         self.assertTrue(re.search(r'Hello,\s+miti!', data))
 
-    def test_confirmation_token(self):
-        '''test that a confirmation token is sent to the user'''
-        user = User.query.filter_by(email='example@gmail.com').first()
-        token = user.generate_confirmation_token()
-        response = self.client.get(url_for('auth.confirm', token=token),
-                                   follow_redirects=True)
-        data = response.get_data(as_text=True)
-        self.assertIn('You have confirmed your account', data)
-
-    def test_logout(self):
         '''test user is logged out'''
         response = self.client.get(url_for('auth.logout'),
                                    follow_redirects=True)

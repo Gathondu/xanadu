@@ -14,6 +14,14 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = True
 
+    # email settings
+    MAIL_SERVER = os.getenv('MAIL_SERVER', None)
+    MAIL_PORT = os.getenv('MAIL_PORT', None)
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME', None)
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', None)
+
     @staticmethod
     def init_app(app):
         '''Initialize the app'''

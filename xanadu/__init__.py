@@ -4,6 +4,7 @@ e.g test and development versions
 '''
 
 from flask import Flask
+from flask_mail import Mail
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -12,6 +13,7 @@ from settings import config
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+mail = Mail()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'  # can also be set to none or basic
 # set endpoint for the login page and
@@ -28,6 +30,7 @@ def create_app(config_name):
     xanadu.config.from_object(config[config_name])
     config[config_name].init_app(xanadu)
     bootstrap.init_app(xanadu)
+    mail.init_app(xanadu)
     db.init_app(xanadu)
     login_manager.init_app(xanadu)
 
@@ -36,6 +39,8 @@ def create_app(config_name):
     xanadu.register_blueprint(main_blueprint)
     from .auth import auth as auth_blueprint
     xanadu.register_blueprint(auth_blueprint, url_prefix='/auth')
+    from .api.v1_0 import api as api_v1_0_blueprint
+    xanadu.register_blueprint(api_v1_0_blueprint, url_prefix='api/v1.0')
 
     return xanadu
 
