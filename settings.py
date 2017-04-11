@@ -8,19 +8,10 @@ class Config:
     '''
     Settings for the app
     '''
-    WTF_CSRF_ENABLED = True
     SECRET_KEY = os.getenv('SECRET_KEY', None)
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = True
-
-    # email settings
-    MAIL_SERVER = os.getenv('MAIL_SERVER', None)
-    MAIL_PORT = os.getenv('MAIL_PORT', None)
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = False
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME', None)
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', None)
 
     @staticmethod
     def init_app(app):
@@ -42,7 +33,6 @@ class TestingConfig(Config):
     '''
     Testing settings
     '''
-    WTF_CSRF_ENABLED = False
     TESTING = True
     test_database = 'sqlite:///' + os.path.join(BASE_DIR, 'xanadu-test.sqlite')
     SQLALCHEMY_DATABASE_URI = os.getenv('XANADU_TEST_DATABASE_URL',

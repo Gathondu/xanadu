@@ -1,14 +1,15 @@
+from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
-from flask_login import UserMixin
+from flask import current_app, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from xanadu import db
-from . import login_manager
+from .exceptions import ValidationError
+
 
 # UserMixin has implementation of is_authenticated, is_active,
 # is_anonymous and get_id()
-class User(UserMixin, db.Model):
+class User(db.Model):
     '''user model'''
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -18,7 +19,6 @@ class User(UserMixin, db.Model):
         db.String(60), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    confirmed = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, nullable=False)
     bucketlist = db.relationship('BucketList', back_populates='author')
     items = db.relationship('Item', back_populates='author')
@@ -37,29 +37,58 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_confirmation_token(self, expiration=3600):
-        '''generate a token for user authentication valid for an hour'''
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id})
+    def generate_auth_token(self, expiration=600):
+        '''generate a token for user authentication valid for a minute'''
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
 
-    def confirm(self, token):
+    @staticmethod
+    def verify_auth_token(token):
         '''confirm token provided by the user'''
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except:
-            return False
-        if data.get('confirm') != self.id:
-            return False
-        self.confirmed = True
-        db.session.add(self)
-        return True
+            return None
+        return User.query.get(data['id'])
 
-# helper function for the login manager
-@login_manager.user_loader
-def load_user(user_id):
-    '''user loader callback function'''
-    return User.query.get(int(user_id))
+    def to_json(self):
+        '''convert user to json serializable dictionary'''
+        json_user = {
+            'url': url_for('api.get_user', id=self.id, _external=True),
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'username': self.nickname,
+            'member_since': str(datetime.utcnow() - self.created_at),
+            'bucketlists': url_for(
+                'api.get_list'),
+            'list_count': len(self.bucketlist)
+        }
+        return json_user
+
+    @staticmethod
+    def from_json(user_json):
+        '''get details from json object'''
+        first_name = user_json.get('first_name')
+        last_name = user_json.get('last_name')
+        nickname = user_json.get('username')
+        email = user_json.get('email')
+        password = user_json.get('password')
+        if not first_name or not last_name or not nickname\
+                or not email or not password:
+            raise ValidationError('post does not have valid data')
+        if User.query.filter_by(nickname=nickname).first()\
+                or User.query.filter_by(email=email).first():
+            raise ValidationError('username and email already exist')
+        user = User(
+            first_name=first_name,
+            last_name=last_name,
+            nickname=nickname,
+            email=email,
+            password=password,
+            created_at=datetime.utcnow()
+        )
+        return user
 
 
 class BucketList(db.Model):
@@ -72,6 +101,41 @@ class BucketList(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='bucketlist')
     items = db.relationship('Item', back_populates='bucketlist')
+
+    def __repr__(self):
+        return '<BucketList {}>'.format(self.title)
+
+    def to_json(self):
+        '''convert list to json serializable dictionary'''
+        json_list = {
+            'url': url_for('api.get_list', id=self.id, _external=True),
+            'title': self.title,
+            'description': self.description,
+            'created_at': str(self.created_at),
+            'author': url_for(
+                'api.get_user', id=self.user_id, _external=True),
+            'items': url_for('api.get_list_items', id=self.id, _external=True),
+            'items_count': len(self.items)
+        }
+        return json_list
+
+    @staticmethod
+    def from_json(list_json):
+        '''get details from json object'''
+        title = list_json.get('title')
+        description = list_json.get('description')
+        author = list_json.get('author')
+        if not title or not description or not author:
+            raise ValidationError('list details must all be provided')
+        bucketlist = BucketList(
+            title=title,
+            description=description,
+            created_at=datetime.utcnow()
+        )
+        return bucketlist
+        # return jsonify({'title': bucketlist.title}, 201, {
+        #     'Location': url_for(
+        #         'api.get_list', id=bucketlist.id, _external=True)})
 
 
 class Item(db.Model):
@@ -89,3 +153,32 @@ class Item(db.Model):
 
     def __repr__(self):
         return '<ListItem {}>'.format(self.title)
+
+    def to_json(self):
+        '''convert list item to json serializable dictionary'''
+        json_item = {
+            'url': url_for('api.get_item', id=self.id, _external=True),
+            'title': self.title,
+            'body': self.body,
+            'accomplished': self.accomplished,
+            'created_at': str(self.created_at),
+            'author': self.user_id,
+            'bucketlist': self.bucketlist_id
+        }
+        return json_item
+
+    @staticmethod
+    def from_json(item_json):
+        '''save the json object from save into the models'''
+        title = item_json.get('title')
+        body = item_json.get('body')
+        if not title or not body:
+            raise ValidationError('item details cannot be empty')
+        item = Item(
+            title=title,
+            body=body,
+            created_at=datetime.utcnow()
+        )
+        return item
+        # return jsonify({'title': item.title}, 201, {
+        #     'Location': url_for('api.get_item', id=item.id, _external=True)})
