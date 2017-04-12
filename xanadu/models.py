@@ -61,7 +61,7 @@ class User(db.Model):
             'username': self.nickname,
             'member_since': str(datetime.utcnow() - self.created_at),
             'bucketlists': url_for(
-                'api.get_list'),
+                'api.get_lists'),
             'list_count': len(self.bucketlist)
         }
         return json_user
@@ -108,13 +108,13 @@ class BucketList(db.Model):
     def to_json(self):
         '''convert list to json serializable dictionary'''
         json_list = {
-            'url': url_for('api.get_list', id=self.id, _external=True),
+            'url': url_for('api.get_one_list', id=self.id),
             'title': self.title,
             'description': self.description,
             'created_at': str(self.created_at),
             'author': url_for(
                 'api.get_user', id=self.user_id, _external=True),
-            'items': url_for('api.get_list_items', id=self.id, _external=True),
+            'items': url_for('api.get_items', id=self.id, _external=True),
             'items_count': len(self.items)
         }
         return json_list
@@ -125,7 +125,7 @@ class BucketList(db.Model):
         title = list_json.get('title')
         description = list_json.get('description')
         author = list_json.get('author')
-        if not title or not description or not author:
+        if not title or not description:
             raise ValidationError('list details must all be provided')
         bucketlist = BucketList(
             title=title,
@@ -133,9 +133,6 @@ class BucketList(db.Model):
             created_at=datetime.utcnow()
         )
         return bucketlist
-        # return jsonify({'title': bucketlist.title}, 201, {
-        #     'Location': url_for(
-        #         'api.get_list', id=bucketlist.id, _external=True)})
 
 
 class Item(db.Model):
@@ -157,13 +154,16 @@ class Item(db.Model):
     def to_json(self):
         '''convert list item to json serializable dictionary'''
         json_item = {
-            'url': url_for('api.get_item', id=self.id, _external=True),
+            'url': url_for(
+                'api.get_item', id=self.bucketlist_id,
+                item_id=self.id, _external=True),
             'title': self.title,
             'body': self.body,
             'accomplished': self.accomplished,
             'created_at': str(self.created_at),
-            'author': self.user_id,
-            'bucketlist': self.bucketlist_id
+            'author': url_for('api.get_user', id=self.user_id, _external=True),
+            'bucketlist': url_for(
+                'api.get_one_list', id=self.bucketlist_id, _external=True)
         }
         return json_item
 
@@ -180,5 +180,3 @@ class Item(db.Model):
             created_at=datetime.utcnow()
         )
         return item
-        # return jsonify({'title': item.title}, 201, {
-        #     'Location': url_for('api.get_item', id=item.id, _external=True)})

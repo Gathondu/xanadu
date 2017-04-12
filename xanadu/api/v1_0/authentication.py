@@ -38,7 +38,7 @@ def before_request():
     pass
 
 
-@api.route('/auth/token')
+@api.route('/auth/token', methods=['GET'])
 @auth.login_required
 def get_token():
     token = g.current_user.generate_auth_token()
@@ -48,7 +48,7 @@ def get_token():
     })
 
 
-@api.route('/auth/login')
+@api.route('/auth/login', methods=['POST'])
 @auth.login_required
 def login():
     '''controller for login'''
