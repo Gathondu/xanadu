@@ -1,27 +1,42 @@
-'''
+"""
 API endpoint for the item
-'''
-from flask import jsonify, request, g, url_for
+"""
+from flask import current_app, jsonify, request, g, url_for
 
-from . import api
-from ... import db
-from ...models import Item, BucketList
+from xanadu.api.v1_0 import api
+from xanadu import db
+from xanadu.models.item import Item
+from xanadu.models.bucketlist import BucketList
 
 
 @api.route('/bucketlist/<int:id>/items/', methods=['GET', 'POST'])
 def get_items(id):
+    page = request.args.get('page', 1, type=int)
     bucketlist = BucketList.query.get_or_404(id)
     if request.method == 'GET':
-        items = bucketlist.items
-        return jsonify([item.to_json() for item in items])
+        paginate = Item.query.filter_by(bucketlist_id=id).paginate(
+            page, current_app.config['ITEMS_PER_LIST'], error_out=False
+            )
+        items = paginate.items
+        previous = None
+        if paginate.has_prev:
+            previous = url_for('api.get_items', id=id, page=page-1, _external=True)
+        next = None
+        if paginate.has_next:
+            next  = url_for('api.get_items', id=id, page=page+1, _external=True)
+        return jsonify({
+            'items': [item.read() for item in items],
+            'previous': previous,
+            'next': next,
+            'count': paginate.total
+            })
     if request.method == 'POST':
-        item = Item.from_json(request.json)
-        item.author = g.current_user
-        item.bucketlist = bucketlist
+        item = Item.create(request.json, g.current_user, bucketlist)
         db.session.add(item)
         db.session.commit()
-        return jsonify({'title': item.title}, 201, {
-            'Location': url_for('api.get_item', id=item.id, _external=True)})
+        return jsonify({'title': item.title,
+                        'location': url_for('api.get_item', id=item.bucketlist_id,
+                                            item_id=item.id, _external=True)}), 201
 
 
 @api.route('/bucketlist/<int:id>/items/<int:item_id>',
@@ -29,18 +44,14 @@ def get_items(id):
 def get_item(id, item_id):
     item = Item.query.get_or_404(item_id)
     if request.method == 'GET':
-        return jsonify(item.to_json())
+        return jsonify(item.read())
     if request.method == 'PUT':
-        for key in dict(request.json).keys():
-            if key == 'title':
-                item.title = dict(request.json)[key]
-            if key == 'body':
-                item.body = dict(request.json)[key]
+        item = item.update(request.json)
         db.session.add(item)
         db.session.commit()
-        return jsonify({'title': item.title}, 200, {
-            'Location': request.url})
+        return jsonify({'title': item.title,
+                        'location': request.url})
     if request.method == 'DELETE':
         db.session.delete(item)
         db.session.commit()
-        return jsonify({'message': 'item deleted'}, 200)
+        return jsonify({'message': 'item deleted'})

@@ -1,48 +1,56 @@
-'''
+"""
 Api endpoint for the bucketlist
-'''
-from flask import jsonify, request, url_for, g
+"""
+from flask import current_app, g, jsonify, request, url_for
 
-from . import api
-from ... import db
-from ...models import User, BucketList, Item
+from xanadu.api.v1_0 import api
+from xanadu import db
+from xanadu.models.user import User
+from xanadu.models.bucketlist import BucketList
+from xanadu.models.item import Item
 
 
 @api.route('/bucketlist/', methods=['GET', 'POST'])
 def get_lists():
+    page = request.args.get('page', 1, type=int)
     if request.method == 'GET':
         user = User.query.filter_by(id=g.current_user.id).first()
-        result = []
-        for bucketlist in BucketList.query.filter_by(author=user).all():
-            result.append(bucketlist.to_json())
-        return jsonify(result)
+        paginate = BucketList.query.filter_by(author=user).paginate(
+            page, current_app.config['LIST_PER_PAGE'], error_out=False)
+        bucketlists = paginate.items
+        previous = None
+        if paginate.has_prev:
+            previous = url_for('api.get_lists', page=page-1, _external=True)
+        next = None
+        if paginate.has_next:
+            next = url_for('api.get_lists', page=page+1, _external=True)
+        return jsonify({
+            'bucketlists': [bucket.read() for bucket in bucketlists],
+            'previous': previous,
+            'next': next,
+            'count': paginate.total
+            })
     if request.method == 'POST':
-        bucketlist = BucketList.from_json(request.json)
-        bucketlist.author = g.current_user
+        bucketlist = BucketList.create(request.json, g.current_user)
         db.session.add(bucketlist)
         db.session.commit()
-        return jsonify({'title': bucketlist.title}, 201, {
-            'Location': url_for(
-                'api.get_one_list', id=bucketlist.id, _external=True)})
+        return jsonify({'title': bucketlist.title,
+                        'location': url_for(
+                                    'api.get_one_list', id=bucketlist.id, _external=True)}), 201
 
 
 @api.route('/bucketlist/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def get_one_list(id):
     bucketlist = BucketList.query.filter_by(id=id).first()
     if request.method == 'GET':
-        return jsonify(bucketlist.to_json())
+        return jsonify(bucketlist.read())
     if request.method == 'PUT':
-        for key in dict(request.json).keys():
-            if key == 'title':
-                bucketlist.title = dict(request.json)[key]
-            if key == 'description':
-                bucketlist.description = dict(request.json)[key]
+        bucketlist = bucketlist.update(request.json)
         db.session.add(bucketlist)
         db.session.commit()
-        return jsonify({'title': bucketlist.title}, 200, {
-            'Location': request.url})
+        return jsonify(bucketlist.read())
     if request.method == 'DELETE':
         db.session.delete(bucketlist)
         db.session.commit()
-        return jsonify({'message': 'bucketlist deleted'}, 200)
+        return jsonify({'message': 'bucketlist deleted'})
 

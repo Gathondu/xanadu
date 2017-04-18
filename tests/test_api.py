@@ -1,91 +1,90 @@
-'''
+"""
 Test the API endpoints
-'''
+"""
 import json
 
-from base64 import b64encode
 from flask import url_for
-from unittest import skip
 
-from xanadu.models import User
+from xanadu.models.bucketlist import BucketList
+from xanadu.models.item import Item
 from tests import BaseTestCase
 
 
 class APITestCase(BaseTestCase):
-    '''test the api endpoints'''
-    def get_api_header(self, username, password):
-        '''helper function to return the header that
-           will be displayed with the API endpoints'''
-        return {
-            'Authorization':
-                'Basic ' + b64encode(
-                    (username +
-                     ':' + password).encode('utf-8')).decode('utf-8'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-
-    def test_user_login(self):
-        '''test that a user can log in'''
-        user = User.query.filter_by(nickname='dng').first()
-        response = self.client.post(
-            url_for('api.login'),
-            data={
-                json.dumps({
-                    'email': user.email,
-                    'password': user.password_hash})})
-        self.assertEqual(200, response.status_code)
+    """test the api endpoints"""
 
     def test_no_authentication(self):
-        '''test that an authenticated user is forbidden'''
-        response = self.client.get(url_for('api.get_item'),
+        """test that an authenticated user is forbidden"""
+        response = self.client.get(url_for('api.get_lists'),
                                    content_type='application/json')
         self.assertEqual(401, response.status_code)
 
     def test_create_list(self):
-        '''test an authenticated user can create a list item'''
+        """test an authenticated user can create a list item"""
         response = self.client.post(
-            url_for('api.new_list'),
-            headers=self.get_api_header('thundoss@gmail.com', 'denno'),
-            data=json.dumps({'title': 'description of the list'})
-        )
+            url_for('api.get_lists'),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps({
+                                'title': 'test title',
+                                'description': 'description of the list'}),
+            content_type='application/json'
+            )
         self.assertEqual(201, response.status_code)
-        url = response.headers.get('Location')
-        self.assertIsNotNone(url)
-        # test that the new item exists
+
+    def test_read_list(self):
+        """test authenticated user can read a list"""
+        bucketlist = BucketList.query.filter_by(author=self.user2).first()
         response = self.client.get(
-            url,
-            headers=self.get_api_header('thundoss@gmail.com', 'denno'))
+            url_for('api.get_one_list', id=bucketlist.id),
+            headers=self.get_api_header(self.get_token())
+            )
         self.assertEqual(200, response.status_code)
-        # also assert for the contents
-        json_response = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(url, json_response['url'])
-        self.assertEqual('description of the list', json_response['body'])
-        self.assertEqual(
-            '<p>description of the list</p>',
-            json_response['body_html'])
+
+    def test_update_list(self):
+        response = self.client.put(
+            url_for('api.get_one_list', id=self.bucketlist2.id),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps({'title': 'changed title'}),
+            content_type='application/json'
+            )
+        self.assertEqual(200, response.status_code)
+
+    def test_delete_list(self):
+        response = self.client.delete(
+            url_for('api.get_one_list', id=self.bucketlist3.id),
+            headers=self.get_api_header(self.get_token())
+            )
+        self.assertEqual('bucketlist deleted', json.loads(response.data)['message'])
 
     def test_create_item(self):
-        '''test an authenticated user can create a list item'''
+        """test an authenticated user can create a list item"""
+        bucketlist = BucketList.query.filter_by(author=self.user).first()
         response = self.client.post(
-            url_for('api.new_item'),
-            headers=self.get_api_header('thundoss@gmail.com', 'denno'),
-            data=json.dumps({'title of item': 'body of the item'})
-        )
+            url_for('api.get_items', id=bucketlist.id),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps(
+                {'title': 'item title', 'body': 'body of item'}),
+            content_type='application/json'
+            )
         self.assertEqual(201, response.status_code)
-        url = response.headers.get('Location')
-        self.assertIsNotNone(url)
 
-        # test that the new item exists
+    def test_read_item(self):
         response = self.client.get(
-            url,
-            headers=self.get_api_header('thundoss@gmail.com', 'denno'))
+            url_for('api.get_item', id=self.item.bucketlist_id, item_id=self.item.id),
+            headers=self.get_api_header(self.get_token()))
         self.assertEqual(200, response.status_code)
 
-        # also assert for the contents
-        json_response = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(url, json_response['url'])
-        self.assertEqual('body of the item', json_response['body'])
-        self.assertEqual(
-            '<p>body of the item</p>',
-            json_response['body_html'])
+    def test_update_item(self):
+        response = self.client.put(
+            url_for('api.get_item', id=self.item2.bucketlist_id, item_id=self.item2.id),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps({'body': 'my body has been changed'}),
+            content_type='application/json'
+            )
+        self.assertEqual(200, response.status_code)
+
+    def test_delete_item(self):
+        response = self.client.delete(
+            url_for('api.get_item', id=self.item5.bucketlist_id, item_id=self.item5.id),
+            headers=self.get_api_header(self.get_token())
+            )

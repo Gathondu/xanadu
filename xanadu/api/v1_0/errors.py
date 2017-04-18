@@ -1,14 +1,10 @@
-'''
+"""
 customize the errors displayed
-'''
+"""
 from flask import jsonify
-from . import api
-from ...exceptions import ValidationError
 
-
-class ValidationError(ValueError):
-    '''use pythons native valuerror as a validation error'''
-    pass
+from xanadu.api.v1_0 import api
+from xanadu.exceptions import ValidationError
 
 
 def bad_request(message):

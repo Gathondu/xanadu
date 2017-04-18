@@ -5,7 +5,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
 from xanadu import create_app, db
-from xanadu.models import User, BucketList, Item
+from xanadu.models import user, bucketlist, item
 
 
 xanadu = create_app(os.getenv('FLASK_CONFIG', 'default'))
@@ -17,9 +17,9 @@ migrate = Migrate(xanadu, db)
 
 # shell commands logic
 def make_shell_context():
-    '''Add imports that will be existent in the shell'''
+    """Add imports that will be existent in the shell"""
     return dict(
-        xanadu=xanadu, db=db, User=User, BucketList=BucketList, Item=Item)
+        xanadu=xanadu, db=db, User=user.User, BucketList=bucketlist.BucketList, Item=item.Item)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -34,7 +34,7 @@ if os.getenv('FLASK_COVERAGE'):
 
 @manager.command
 def tests(coverage=False):
-    '''run the unit tests with option of including coverage'''
+    """run the unit tests with option of including coverage"""
     if coverage and not os.getenv('FLASK_COVERAGE'):
         import sys
         os.environ['FLASK_COVERAGE'] = '1'
@@ -56,13 +56,14 @@ def tests(coverage=False):
 
 @manager.command
 def dropdb():
-    '''drop the database'''
+    """drop the database"""
+    db.reflect()
     db.drop_all()
 
 
 @manager.command
 def deploy():
-    '''run deployment tasks'''
+    """run deployment tasks"""
     from flask_migrate import upgrade
 
     upgrade()
