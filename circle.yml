@@ -1,16 +1,38 @@
-machine:
-  python:
-    version: 3.6.1
-database:
-  override:
-    - true
-environment:
-  FLASK_CONFIG: 'testing'
-  PRESERVE_CONTEXT_ON_EXCEPTION: False
-  XANADU_TEST_DATABASE_URL: postgres://postgres@127.0.0.1:5433/test_database
-dependencies:
-  pre:
-    - pip install -r requirements.txt
-test:
-  override:
-    - python manage.py tests
+version: 2
+  jobs:
+    build:
+      docker:
+        - image python:3.5
+          environment:
+            FLASK_CONFIG: testing
+            XANADU_TEST_DATABASE_URL: postgresql://ubuntu@localhost/xanadu_test?sslmode=disable
+        - image postgres:9.5.5
+          environment:
+            POSTGRES_USER: ubuntu
+            POSTGRES_DB: xanadu-test
+            POSTGRES_PASSWORD: ""
+        working_directory: /home/ubuntu/xanadu
+        steps:
+          - checkout
+          - run
+              name: Install Yarn
+              command: |
+                apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68576280 86E50310
+                echo "deb http://deb.nodesource.com/node_7.x jessie main" | tee /etc/apt/sources.list.d/nodesource.list
+                echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+                apt-get update -qq
+                apt-get install -y -qq nodejs yarn
+          - restore_cache
+              key: projectname-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          - run yarn && pip install -r requirements.txt
+          - save_cache
+              key: projectname-{{ .Branch }}-{{ checksum "yarn.lock" }}
+              paths:
+                - "/home/ubuntu/.yarn-cache"
+          - run python manage.py tests --coverage
+          - store_artifacts
+              path: test-reports/coverage
+              destination: reports
+          - store_test_results
+              path: "test-reports/"
+
