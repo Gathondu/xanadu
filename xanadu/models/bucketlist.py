@@ -69,3 +69,6 @@ class BucketList(db.Model):
                 self.description = dict(list_json)[key]
         self.modified_at = datetime.utcnow()
         return self
+
+    def authenticate_user(self, id):
+        return id == self.user_id
