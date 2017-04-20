@@ -1,22 +1,16 @@
 machine:
   python:
     version: 3.6.1
-  services:
-    - postgresql
 database:
   override:
-    - createdb -U ubuntu xanadu-test
+    - true
 environment:
   FLASK_CONFIG: 'testing'
   PRESERVE_CONTEXT_ON_EXCEPTION: False
+  XANADU_TEST_DATABASE_URL: postgres://postgres@127.0.0.1:5433/test_database
 dependencies:
   pre:
     - pip install -r requirements.txt
 test:
   override:
     - python manage.py tests
-deployment:
-  staging:
-    branch: develop
-    heroku:
-      appname: xanadu-bucketlist
