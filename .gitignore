@@ -95,3 +95,5 @@ ENV/
 
 # ignore files in the tmp folder
 tmp/
+.idea/
+migrations/versions/

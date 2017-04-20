@@ -31,8 +31,8 @@ class APITestCase(BaseTestCase):
         self.assertEqual(201, response.status_code)
 
     def test_read_list(self):
-        """test authenticated user can read a list"""
-        bucketlist = BucketList.query.filter_by(author=self.user2).first()
+        """test authenticated user can read a list that belongs to them"""
+        bucketlist = BucketList.query.filter_by(author=self.user).first()
         response = self.client.get(
             url_for('api.get_one_list', id=bucketlist.id),
             headers=self.get_api_header(self.get_token())
@@ -40,22 +40,22 @@ class APITestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_update_list(self):
-        """test authenticated user can update a list"""
+        """test authenticated user can update a list that belongs to them"""
         response = self.client.put(
             url_for('api.get_one_list', id=self.bucketlist2.id),
             headers=self.get_api_header(self.get_token()),
             data=json.dumps({'title': 'changed title'}),
             content_type='application/json'
             )
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(201, response.status_code)
 
     def test_delete_list(self):
-        """test authenticated user can delete a list"""
+        """test authenticated user can delete a list that belongs to them"""
         response = self.client.delete(
-            url_for('api.get_one_list', id=self.bucketlist3.id),
+            url_for('api.get_one_list', id=self.bucketlist2.id),
             headers=self.get_api_header(self.get_token())
             )
-        self.assertEqual('bucketlist deleted', json.loads(response.data)['message'])
+        self.assertEqual(204, response.status_code)
 
     def test_create_item(self):
         """test an authenticated user can create a list item"""
@@ -70,25 +70,54 @@ class APITestCase(BaseTestCase):
         self.assertEqual(201, response.status_code)
 
     def test_read_item(self):
-        """test an authenticated user can read a list item"""
+        """test an authenticated user can read a list item that belongs to them"""
         response = self.client.get(
             url_for('api.get_item', id=self.item.bucketlist_id, item_id=self.item.id),
             headers=self.get_api_header(self.get_token()))
         self.assertEqual(200, response.status_code)
 
     def test_update_item(self):
-        """test an authenticated user can update a list item"""
+        """test an authenticated user can update a list item that belongs to them"""
         response = self.client.put(
             url_for('api.get_item', id=self.item2.bucketlist_id, item_id=self.item2.id),
             headers=self.get_api_header(self.get_token()),
             data=json.dumps({'body': 'my body has been changed'}),
             content_type='application/json'
             )
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(201, response.status_code)
 
     def test_delete_item(self):
-        """test an authenticated user can delete a list item"""
+        """test an authenticated user can delete a list item that belongs to them"""
         response = self.client.delete(
-            url_for('api.get_item', id=self.item5.bucketlist_id, item_id=self.item5.id),
+            url_for('api.get_item', id=self.item3.bucketlist_id, item_id=self.item3.id),
             headers=self.get_api_header(self.get_token())
             )
+        self.assertEqual(204, response.status_code)
+
+    # Edge cases
+    def test_cannot_view_other_people_list(self):
+        """test an authenticated user cannot view a list item that doesn't belongs to them"""
+        bucketlist = BucketList.query.filter_by(author=self.user2).first()
+        response = self.client.get(
+            url_for('api.get_one_list', id=bucketlist.id),
+            headers=self.get_api_header(self.get_token())
+            )
+        self.assertEqual(401, response.status_code)
+
+    def test_cannot_delete_other_people_list(self):
+        """test an authenticated user cannot delete a list item that doesn't belongs to them"""
+        response = self.client.delete(
+            url_for('api.get_one_list', id=self.bucketlist3.id),
+            headers=self.get_api_header(self.get_token())
+            )
+        self.assertEqual(401, response.status_code)
+
+    def test_cannot_update_other_people_items(self):
+        """test an authenticated user cannot update a list item that belongs to other users"""
+        response = self.client.put(
+            url_for('api.get_item', id=self.item4.bucketlist_id, item_id=self.item4.id),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps({'body': 'my body has been changed'}),
+            content_type='application/json'
+            )
+        self.assertEqual(401, response.status_code)

@@ -4,6 +4,7 @@ Api endpoint for the bucketlist
 from flask import current_app, g, jsonify, request, url_for
 
 from xanadu.api.v1_0 import api
+from xanadu.api.v1_0.errors import unauthorized
 from xanadu import db
 from xanadu.models.user import User
 from xanadu.models.bucketlist import BucketList
@@ -37,27 +38,26 @@ def get_lists():
             'next': next,
             'count': paginate.total
             })
-    if request.method == 'POST':
+    elif request.method == 'POST':
         bucketlist = BucketList.create(request.json, g.current_user)
         db.session.add(bucketlist)
         db.session.commit()
-        return jsonify({'title': bucketlist.title,
-                        'location': url_for(
-                                    'api.get_one_list', id=bucketlist.id, _external=True)}), 201
+        return jsonify(bucketlist.read()), 201
 
 
 @api.route('/bucketlist/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def get_one_list(id):
     bucketlist = BucketList.query.filter_by(id=id).first()
-    if request.method == 'GET':
+    if not bucketlist.authenticate_user(g.current_user.id):
+        return unauthorized('resource does not belong to current user')
+    elif request.method == 'GET':
         return jsonify(bucketlist.read())
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         bucketlist = bucketlist.update(request.json)
         db.session.add(bucketlist)
         db.session.commit()
-        return jsonify(bucketlist.read())
-    if request.method == 'DELETE':
+        return jsonify(bucketlist.read()), 201
+    elif request.method == 'DELETE':
         db.session.delete(bucketlist)
         db.session.commit()
-        return jsonify({'message': 'bucketlist deleted'})
-
+        return jsonify(), 204

@@ -23,7 +23,6 @@ class BaseTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.client = self.app.test_client()
-        db.configure_mappers()
         db.create_all()
         self.user = User(
             first_name='denis',
