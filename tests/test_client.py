@@ -5,7 +5,6 @@ import json
 
 from flask import url_for
 
-from xanadu.exceptions import ValidationError
 from tests import BaseTestCase
 
 
@@ -37,6 +36,7 @@ class ClientTestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_update_user(self):
+        """test the user can update details"""
         response = self.client.put(
             url_for('api.get_user'),
             headers=self.get_api_header(self.get_token()),
@@ -46,6 +46,7 @@ class ClientTestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_cannot_reuse_username(self):
+        """test a user cannot use a username or email that is already used"""
         response = self.client.put(
             url_for('api.get_user'),
             headers=self.get_api_header(self.get_token()),

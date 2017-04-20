@@ -6,7 +6,6 @@ import json
 from flask import url_for
 
 from xanadu.models.bucketlist import BucketList
-from xanadu.models.item import Item
 from tests import BaseTestCase
 
 
@@ -20,7 +19,7 @@ class APITestCase(BaseTestCase):
         self.assertEqual(401, response.status_code)
 
     def test_create_list(self):
-        """test an authenticated user can create a list item"""
+        """test an authenticated user can create a list"""
         response = self.client.post(
             url_for('api.get_lists'),
             headers=self.get_api_header(self.get_token()),
@@ -41,6 +40,7 @@ class APITestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_update_list(self):
+        """test authenticated user can update a list"""
         response = self.client.put(
             url_for('api.get_one_list', id=self.bucketlist2.id),
             headers=self.get_api_header(self.get_token()),
@@ -50,6 +50,7 @@ class APITestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_delete_list(self):
+        """test authenticated user can delete a list"""
         response = self.client.delete(
             url_for('api.get_one_list', id=self.bucketlist3.id),
             headers=self.get_api_header(self.get_token())
@@ -69,12 +70,14 @@ class APITestCase(BaseTestCase):
         self.assertEqual(201, response.status_code)
 
     def test_read_item(self):
+        """test an authenticated user can read a list item"""
         response = self.client.get(
             url_for('api.get_item', id=self.item.bucketlist_id, item_id=self.item.id),
             headers=self.get_api_header(self.get_token()))
         self.assertEqual(200, response.status_code)
 
     def test_update_item(self):
+        """test an authenticated user can update a list item"""
         response = self.client.put(
             url_for('api.get_item', id=self.item2.bucketlist_id, item_id=self.item2.id),
             headers=self.get_api_header(self.get_token()),
@@ -84,6 +87,7 @@ class APITestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_delete_item(self):
+        """test an authenticated user can delete a list item"""
         response = self.client.delete(
             url_for('api.get_item', id=self.item5.bucketlist_id, item_id=self.item5.id),
             headers=self.get_api_header(self.get_token())

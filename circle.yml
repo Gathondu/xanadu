@@ -1,15 +1,17 @@
 machine:
   python:
     version: 3.6.1
+  services:
+    - postgresql
+database:
+  override:
+    - createdb -U ubuntu xanadu-test
 environment:
   FLASK_CONFIG: 'testing'
+  PRESERVE_CONTEXT_ON_EXCEPTION: False
 dependencies:
   pre:
     - pip install -r requirements.txt
-    - python manage.py init_db
-    - python manage.py db init
-    - python manage.py db migrate
-    - python manage.py db upgrade
 test:
   override:
     - python manage.py tests
