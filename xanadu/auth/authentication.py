@@ -33,31 +33,33 @@ def before_request():
 @auth.route('/login', methods=['POST'])
 def login():
     """controller for login"""
-    username = request.json.get('username')
-    password = request.json.get('password')
-    user = User.query.filter_by(email=username).first()
-    expiry = None
-    if not user and not user.verify_password(password):
-        return unauthorized('Invalid credentials')
-    if 'expiry' in dict(request.json).keys():
-        expiry = dict(request.json)['expiry']
-        token = user.generate_auth_token(expiration=expiry)
-    token = user.generate_auth_token()
-    g.current_user = user
-    return jsonify({'username': g.current_user.nickname,
-                   'Location':
-                    url_for(
-                           'api.get_user', id=g.current_user.id, _external=True)},
-                   {
-                       'token': token.decode('ascii'),
-                       'expiration': 3600 if not expiry else expiry})
+    if request.method == 'POST':
+        username = request.json.get('username')
+        password = request.json.get('password')
+        user = User.query.filter_by(email=username).first()
+        expiry = None
+        if not user and not user.verify_password(password):
+            return unauthorized('Invalid credentials')
+        if 'expiry' in dict(request.json).keys():
+            expiry = dict(request.json)['expiry']
+            token = user.generate_auth_token(expiration=expiry)
+        token = user.generate_auth_token()
+        g.current_user = user
+        return jsonify({'username': g.current_user.nickname,
+                       'Location':
+                        url_for(
+                               'api.get_user', id=g.current_user.id, _external=True)},
+                       {
+                           'token': token.decode('ascii'),
+                           'expiration': 3600 if not expiry else expiry})
 
 
 @auth.route('/register', methods=['POST'])
 def register():
     """controller for registering new users"""
-    user = User.create(request.json)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({'username': user.nickname,
-                    'Location': url_for('api.get_user', id=user.id, _external=True)}), 201
+    if request.method == 'POST':
+        user = User.create(request.json)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'username': user.nickname,
+                        'Location': url_for('api.get_user', id=user.id, _external=True)}), 201
