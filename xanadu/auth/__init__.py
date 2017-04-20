@@ -1,8 +1,8 @@
-'''
-Create a blueprint for authentication related to user authentication
-'''
+"""
+Authentication blueprint
+"""
 from flask import Blueprint
 
 auth = Blueprint('auth', __name__)
 
-from . import views
+from xanadu.auth import authentication
