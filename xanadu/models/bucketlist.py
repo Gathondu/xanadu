@@ -1,22 +1,32 @@
 from datetime import datetime
 from flask import url_for
+from flask_sqlalchemy import BaseQuery
+from sqlalchemy_searchable import SearchQueryMixin, make_searchable
+from sqlalchemy_utils import TSVectorType
 
 from xanadu import db
 from xanadu.exceptions import ValidationError
-from xanadu.models.user import User
+
+make_searchable()
+
+
+class BucketListQuery(BaseQuery, SearchQueryMixin):
+    pass
 
 
 class BucketList(db.Model):
     """bucketlist model"""
+    query_class = BucketListQuery
     __tablename__ = 'bucketlist'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(20), index=True, nullable=False)
-    description = db.Column(db.String(50))
-    created_at = db.Column(db.DateTime, nullable=False)
-    modified_at = db.Column(db.DateTime, nullable=False)
+    title = db.Column(db.Unicode(20), index=True, nullable=False)
+    description = db.Column(db.Unicode(100))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='bucketlist')
     items = db.relationship('Item', back_populates='bucketlist')
+    search_vector = db.Column(TSVectorType('title', 'description'))
 
     def __repr__(self):
         return '<BucketList {}>'.format(self.title)
@@ -31,9 +41,7 @@ class BucketList(db.Model):
         bucketlist = BucketList(
             author=author,
             title=title,
-            description=description,
-            created_at=datetime.utcnow(),
-            modified_at=datetime.utcnow()
+            description=description
             )
         return bucketlist
 

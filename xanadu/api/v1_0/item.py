@@ -11,19 +11,22 @@ from xanadu.models.bucketlist import BucketList
 
 @api.route('/bucketlist/<int:id>/items/', methods=['GET', 'POST'])
 def get_items(id):
-    page = request.args.get('page', 1, type=int)
     bucketlist = BucketList.query.get_or_404(id)
     if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', current_app.config['ITEMS_PER_LIST'], type=int)
+        if limit > 100:
+            limit = current_app.config['MAX_RESULTS']
         paginate = Item.query.filter_by(bucketlist_id=id).paginate(
-            page, current_app.config['ITEMS_PER_LIST'], error_out=False
+            page, limit, error_out=False
             )
         items = paginate.items
         previous = None
         if paginate.has_prev:
-            previous = url_for('api.get_items', id=id, page=page-1, _external=True)
+            previous = url_for('api.get_items', id=id, page=page-1, limit=limit, _external=True)
         next = None
         if paginate.has_next:
-            next  = url_for('api.get_items', id=id, page=page+1, _external=True)
+            next  = url_for('api.get_items', id=id, page=page+1, limit=limit, _external=True)
         return jsonify({
             'items': [item.read() for item in items],
             'previous': previous,

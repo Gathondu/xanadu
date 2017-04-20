@@ -46,10 +46,10 @@ class ClientTestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_cannot_reuse_username(self):
-        with self.assertRaises(ValidationError):
-            response = self.client.put(
-                url_for('api.get_user'),
-                headers=self.get_api_header(self.get_token()),
-                data=json.dumps({'username': 'dng'}),
-                content_type='application/json'
-                )
+        response = self.client.put(
+            url_for('api.get_user'),
+            headers=self.get_api_header(self.get_token()),
+            data=json.dumps({'username': 'dng'}),
+            content_type='application/json'
+            )
+        self.assertEqual('username already exists', json.loads(response.data)['message'])

@@ -7,23 +7,30 @@ from xanadu.api.v1_0 import api
 from xanadu import db
 from xanadu.models.user import User
 from xanadu.models.bucketlist import BucketList
-from xanadu.models.item import Item
 
 
 @api.route('/bucketlist/', methods=['GET', 'POST'])
 def get_lists():
-    page = request.args.get('page', 1, type=int)
     if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', current_app.config['LIST_PER_PAGE'], type=int)
+        search = request.args.get('q', None, type=str)
+        if limit > 100:
+            limit = current_app.config['MAX_RESULTS']
         user = User.query.filter_by(id=g.current_user.id).first()
-        paginate = BucketList.query.filter_by(author=user).paginate(
-            page, current_app.config['LIST_PER_PAGE'], error_out=False)
+        if search:
+            paginate = BucketList.query.search(search).filter_by(author=user).paginate(
+                page, limit, error_out=False)
+        else:
+            paginate = BucketList.query.filter_by(author=user).paginate(
+                page, limit, error_out=False)
         bucketlists = paginate.items
         previous = None
         if paginate.has_prev:
-            previous = url_for('api.get_lists', page=page-1, _external=True)
+            previous = url_for('api.get_lists', page=page-1, limit=limit, _external=True)
         next = None
         if paginate.has_next:
-            next = url_for('api.get_lists', page=page+1, _external=True)
+            next = url_for('api.get_lists', page=page+1, limit=limit, _external=True)
         return jsonify({
             'bucketlists': [bucket.read() for bucket in bucketlists],
             'previous': previous,

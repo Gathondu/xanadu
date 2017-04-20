@@ -1,23 +1,34 @@
 from datetime import datetime
 from flask import url_for
+from flask_sqlalchemy import BaseQuery
+from sqlalchemy_searchable import make_searchable, SearchQueryMixin
+from sqlalchemy_utils import TSVectorType
 
 from xanadu import db
 from xanadu.exceptions import ValidationError
 
+make_searchable()
+
+
+class ItemQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 
 class Item(db.Model):
     """item model"""
+    query_class = ItemQuery
     __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(20), index=True, nullable=False)
-    body = db.Column(db.Text())
+    title = db.Column(db.Unicode(20), index=True, nullable=False)
+    body = db.Column(db.UnicodeText())
     accomplished = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, nullable=False)
-    modified_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', back_populates='items')
     bucketlist_id = db.Column(db.Integer, db.ForeignKey('bucketlist.id'))
     bucketlist = db.relationship('BucketList', back_populates='items')
+    search_vector = db.Column(TSVectorType('title', 'body'))
 
     def __repr__(self):
         return '<ListItem {}>'.format(self.title)
@@ -33,9 +44,7 @@ class Item(db.Model):
             author=author,
             bucketlist=bucketlist,
             title=title,
-            body=body,
-            created_at=datetime.utcnow(),
-            modified_at=datetime.utcnow()
+            body=body
             )
         return item
 

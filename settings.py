@@ -7,12 +7,13 @@ class Config:
     """
     Settings for the app
     """
+    DEBUG = True
+    ITEMS_PER_LIST = 10
+    LIST_PER_PAGE = 20
+    MAX_RESULTS = 100
     SECRET_KEY = os.getenv('SECRET_KEY', None)
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = True
-    LIST_PER_PAGE = 5
-    ITEMS_PER_LIST = 3
 
     @staticmethod
     def init_app(app):

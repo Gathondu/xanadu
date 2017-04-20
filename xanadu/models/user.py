@@ -19,8 +19,8 @@ class User(db.Model):
         db.String(60), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
-    modified_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     bucketlist = db.relationship('BucketList', back_populates='author')
     items = db.relationship('Item', back_populates='author')
 
@@ -72,9 +72,7 @@ class User(db.Model):
             last_name=last_name,
             nickname=nickname,
             email=email,
-            password=password,
-            created_at=datetime.utcnow(),
-            modified_at=datetime.utcnow()
+            password=password
             )
         return user
 
@@ -99,12 +97,12 @@ class User(db.Model):
             if key == 'username':
                 key = dict(user_json)[key]
                 if User.query.filter_by(nickname=key).first():
-                    raise ValidationError('username already exist')
+                    raise ValidationError('username already exists')
                 self.nickname = key
             if key == 'email':
                 key = dict(user_json)[key]
                 if User.query.filter_by(email=key).first():
-                    raise ValidationError('email already exist')
+                    raise ValidationError('email already exists')
                 self.email = key
             if key == 'password':
                 key = dict(user_json)[key]
