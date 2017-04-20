@@ -10,10 +10,10 @@ from xanadu.models.user import User
 
 @api.route('/user/', methods=['GET', 'PUT'])
 def get_user():
-    user = User.query.get_or_404(g.current_user.id)
+    user = User.query.filter_by(id=g.current_user.id).first()
     if request.method == 'GET':
         return jsonify(user.read())
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         user = user.update(request.json)
         db.session.add(user)
         db.session.commit()

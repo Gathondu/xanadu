@@ -102,7 +102,7 @@ class APITestCase(BaseTestCase):
             url_for('api.get_one_list', id=bucketlist.id),
             headers=self.get_api_header(self.get_token())
             )
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(403, response.status_code)
 
     def test_cannot_delete_other_people_list(self):
         """test an authenticated user cannot delete a list item that doesn't belongs to them"""
@@ -110,7 +110,7 @@ class APITestCase(BaseTestCase):
             url_for('api.get_one_list', id=self.bucketlist3.id),
             headers=self.get_api_header(self.get_token())
             )
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(403, response.status_code)
 
     def test_cannot_update_other_people_items(self):
         """test an authenticated user cannot update a list item that belongs to other users"""
@@ -120,4 +120,18 @@ class APITestCase(BaseTestCase):
             data=json.dumps({'body': 'my body has been changed'}),
             content_type='application/json'
             )
-        self.assertEqual(401, response.status_code)
+        self.assertEqual(403, response.status_code)
+
+    def test_non_existent_resource(self):
+        """Test that a non existent resource fails with error code 404"""
+        response = self.client.get(
+            url_for('api.get_item', id=self.item.bucketlist_id, item_id=40),
+            headers=self.get_api_header(self.get_token()))
+        self.assertEqual(404, response.status_code)
+
+    def test_non_existent_user(self):
+        """Test a non existent user"""
+        response = self.client.get(
+            url_for('api.get_one_list', id=50),
+            headers=self.get_api_header(self.get_token()))
+        self.assertEqual(404, response.status_code)
