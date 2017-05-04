@@ -107,5 +107,5 @@ class BaseTestCase(unittest.TestCase):
             url_for('auth.login'),
             data=json.dumps(
                 {'username': 'thundoss@gmail.com', 'password': 'denno'}),
-            content_type='application/json')
-        return json.loads(response.data)[1]['token']
+            headers={'content_type': 'application/json'})
+        return json.loads(response.data)['token']

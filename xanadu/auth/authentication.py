@@ -1,6 +1,7 @@
 """
 Api endpoints for authentication
 """
+import json
 from flask import jsonify, g, url_for, request
 from flask_httpauth import HTTPTokenAuth
 
@@ -26,35 +27,41 @@ def auth_error():
 
 @api.before_request
 @token_auth.login_required
+# @cross_origin()
 def before_request():
     pass
 
 
 @auth.route('/login', methods=['POST'])
+# @cross_origin()
 def login():
     """controller for login"""
     if request.method == 'POST':
-        username = request.json.get('username')
-        password = request.json.get('password')
+        if not request.json:
+            username = json.loads(request.data).get('username')
+            password = json.loads(request.data).get('password')
+        else:
+            username = request.json.get('username')
+            password = request.json.get('password')
         user = User.query.filter_by(email=username).first()
         expiry = None
         if not user and not user.verify_password(password):
             return unauthorized('Invalid credentials')
-        if 'expiry' in dict(request.json).keys():
-            expiry = dict(request.json)['expiry']
-            token = user.generate_auth_token(expiration=expiry)
+        # if 'expiry' in dict(request.json).keys():
+        #     expiry = dict(request.json)['expiry']
+        #     token = user.generate_auth_token(expiration=expiry)
         token = user.generate_auth_token()
         g.current_user = user
         return jsonify({'username': g.current_user.nickname,
                        'Location':
                         url_for(
-                               'api.get_user', id=g.current_user.id, _external=True)},
-                       {
+                               'api.get_user', id=g.current_user.id, _external=True),
                            'token': token.decode('ascii'),
                            'expiration': 3600 if not expiry else expiry})
 
 
 @auth.route('/register', methods=['POST'])
+# @cross_origin()
 def register():
     """controller for registering new users"""
     if request.method == 'POST':
