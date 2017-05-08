@@ -1,5 +1,8 @@
-<p>
-  bucketlists works!
-</p>
-{{ bucketlist }}
+<h1>
+  {{ title | uppercase }}
+</h1>
+<div *ngFor="let list of bucketlist['bucketlists']" [routerLink]="['/bucketlist', list.id]">
+    <h2>{{ list.title }}</h2>
+  <p>{{ list.description }}</p>
+</div>
 <p class="error" *ngIf="errorMessage">{{errorMessage}}</p>

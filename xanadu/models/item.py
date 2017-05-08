@@ -54,9 +54,9 @@ class Item(db.Model):
             'id': self.id,
             'location': url_for(
                 'api.get_item', id=self.bucketlist_id,
-                item_id=self.id, _external=True),
+                item_id=self.id),
             'title': self.title,
-            'accomplished': self.accomplished,
+            'content': self.body,
             'date_created': str(self.created_at),
             'date_modified': str(self.modified_at),
             'done': self.accomplished

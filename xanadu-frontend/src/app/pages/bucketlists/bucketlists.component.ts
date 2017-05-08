@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-import {BucketlistService} from "../../services/bucketlist.service";
-import {AuthenticationService} from "../../services/authentication.service";
+import { DataService } from "../../services/data.service";
 
 @Component({
   selector: 'bucketlists',
@@ -9,20 +7,24 @@ import {AuthenticationService} from "../../services/authentication.service";
   styleUrls: ['./bucketlists.component.css'],
 })
 export class BucketlistsComponent implements OnInit {
+  title = `Welcome to your Bucketlist ${localStorage.getItem('username')}`;
 
   errorMessage: string;
-  private _baseUrl = 'http://127.0.0.1:5000';
   bucketlist = {};
-  token = {};
   constructor(
-    private _dataService: BucketlistService,
-    private _http: AuthenticationService
+    private _dataService: DataService
   ) { }
 
   ngOnInit() {
     this.getBucketList();
   }
-  getBucketList(){
+
+  getBucketList() {
+    // get bucketlist objects
+    return this._dataService.get('/api/v1.0/bucketlist/')
+    .subscribe(data => {
+      this.bucketlist = data;
+    });
   }
 
 }

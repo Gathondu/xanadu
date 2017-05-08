@@ -2,18 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import {Http, RequestOptions, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../services/authentication.service";
-import {AlertService} from "../../services/alert.service";
-import {CookieService} from "ng2-cookies";
+
+import { AlertService } from "../../services/alert.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   providers: [
-    AuthenticationService,
-    AlertService,
-    CookieService
+    UserService,
+    AlertService
   ]
 })
 export class LoginComponent implements OnInit {
@@ -21,38 +20,27 @@ export class LoginComponent implements OnInit {
   model: any = {};
   loading = false;
   returnUrl: string;
-  private _baseUrl = 'http://127.0.0.1:5000';
-
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _auth: AuthenticationService,
+    private _user: UserService,
     private _alert: AlertService
   ) { }
 
   ngOnInit() {
-    // reset login status
-    this._auth.logout();
-
+    this._user.logout();
     // get return url from route parameters or default to '/'
-    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '';
   }
 
   login() {
     this.loading = true;
-    this._auth.login(this.model.username, this.model.password)
+    this._user.login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          console.log("ndio huyo mimi", this.returnUrl);
-          this._router.navigate(['/bucketlist'])
-            .then(() => {
-            console.log('navigated');
-            })
-            .catch(err => {
-              console.log('could not navigate', err);
-            })
-        },
+          this._router.navigate([this.returnUrl]);
+            },
         error => {
           this._alert.error(error);
           this.loading = false;

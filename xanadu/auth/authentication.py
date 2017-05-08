@@ -14,6 +14,16 @@ from xanadu.models.user import User
 token_auth = HTTPTokenAuth(scheme='Token')
 
 
+@auth.route('/verify', methods=['POST'])
+def verify():
+    if not request.json:
+        token = json.loads(request.data).get('token')
+    else:
+        token = request.json.get('token')
+    g.current_user = User.verify_auth_token(token)
+    return jsonify(g.current_user is not None)
+
+
 @token_auth.verify_token
 def verify_token(token):
     g.current_user = User.verify_auth_token(token)
@@ -27,13 +37,11 @@ def auth_error():
 
 @api.before_request
 @token_auth.login_required
-# @cross_origin()
 def before_request():
     pass
 
 
 @auth.route('/login', methods=['POST'])
-# @cross_origin()
 def login():
     """controller for login"""
     if request.method == 'POST':
@@ -53,15 +61,15 @@ def login():
         token = user.generate_auth_token()
         g.current_user = user
         return jsonify({'username': g.current_user.nickname,
-                       'Location':
+                        'Location':
                         url_for(
-                               'api.get_user', id=g.current_user.id, _external=True),
-                           'token': token.decode('ascii'),
-                           'expiration': 3600 if not expiry else expiry})
+                               'api.get_user',
+                               id=g.current_user.id, _external=True),
+                            'token': token.decode('ascii'),
+                            'expiration': 3600 if not expiry else expiry})
 
 
 @auth.route('/register', methods=['POST'])
-# @cross_origin()
 def register():
     """controller for registering new users"""
     if request.method == 'POST':
@@ -69,4 +77,6 @@ def register():
         db.session.add(user)
         db.session.commit()
         return jsonify({'username': user.nickname,
-                        'Location': url_for('api.get_user', id=user.id, _external=True)}), 201
+                        'Location': url_for(
+                            'api.get_user',
+                            id=user.id, _external=True)}), 201
