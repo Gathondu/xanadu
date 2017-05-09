@@ -1,28 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from "../app/services/data.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = `Welcome to your Bucketlist ${localStorage.getItem('username')}`;
-  errorMessage: string;
-  bucketlist = {};
-  constructor(
-    private _dataService: DataService
-  ) { }
-
+export class AppComponent implements OnInit {
+  verified: boolean;
+  username: string;
+  constructor(private _router: Router) { }
   ngOnInit() {
-    this.getBucketList();
-  }
-
-  getBucketList() {
-    // get bucketlist objects
-    return this._dataService.get('/api/v1.0/bucketlist/')
-      .subscribe(data => {
-        this.bucketlist = data;
-      });
+    this.username = localStorage.getItem('username');
   }
 }

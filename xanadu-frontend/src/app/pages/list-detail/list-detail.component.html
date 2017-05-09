@@ -1,5 +1,18 @@
-<div *ngFor="let listitem of bucketlist.items" [routerLink]="['/items', listitem.location]">
-  <h1>{{listitem.title}}</h1>
-  <p>{{listitem.content}}</p>
+<div class="row">
+  <nav class="navbar navbar-light">
+    <form class="form-inline" style="padding-left:980px;">
+      <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Items">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </nav>
 </div>
-    <a (click)="back()">Back</a>
+<div class="row">
+  <div class="col-md-4 item" *ngFor="let listitem of bucketlist.items">
+    <h1>{{listitem.title}}</h1>
+    <p>{{listitem.content}}</p>
+    <a [routerLink]="['/items', listitem.location]" class="btn btn-primary" id="view-btn"><span class="glyphicon glyphicon-chevron-right"></span>View Item</a>
+  </div>
+</div>
+<br>
+<br>
+<a (click)="back()" class="col-md-3 btn btn-secondary back">Back</a>

@@ -5,6 +5,7 @@ import { BucketlistsComponent } from "app/pages/bucketlists/bucketlists.componen
 import { AppComponent } from "app/app.component";
 import { ListDetailComponent } from "app/pages/list-detail/list-detail.component";
 import { ItemsComponent } from "app/pages/items/items.component";
+import { RegisterComponent } from "app/pages/register/register.component";
 
 export const AppRoutes = [
   { path: 'login', component: LoginComponent },
@@ -27,5 +28,9 @@ export const AppRoutes = [
     path: 'items/:location',
     canActivate: [AuthguardService],
     component: ItemsComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   }
 ];

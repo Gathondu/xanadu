@@ -8,7 +8,7 @@ export class DataService {
 
   private _baseUrl = 'http://127.0.0.1:5000';
   constructor(
-    private _http: Http
+    private _http: Http,
   ) { }
 
   createHeader(): Headers{
@@ -67,13 +67,12 @@ export class DataService {
     if (error instanceof Response){
       const body = error.json() || '';
       const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      errMsg = `${error.status} - ${error.statusText || ''} - ${body['message']} ${err}`;
     }else {
-
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg)
+    return Observable.throw(error.json()['message'])
   }
 
 }

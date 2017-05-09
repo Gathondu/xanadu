@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../../services/data.service";
-import { ActivatedRoute } from "@angular/router";
-import { Location } from "@angular/common";
+import { ActivatedRoute, Router } from "@angular/router";
+
+import { BucketlistsComponent } from "../../pages/bucketlists/bucketlists.component";
 
 @Component({
   selector: 'list-detail',
@@ -15,7 +16,7 @@ export class ListDetailComponent implements OnInit {
   constructor(
     private _dataService: DataService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _router: Router,
   ) { }
 
   ngOnInit() {
@@ -28,6 +29,6 @@ export class ListDetailComponent implements OnInit {
   }
 
   back() {
-    this._location.back();
+    this._router.navigate(['/bucketlist'])
   }
 }

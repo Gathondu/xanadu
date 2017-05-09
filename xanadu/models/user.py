@@ -29,7 +29,7 @@ class User(db.Model):
 
     @property
     def password(self):
-        raise AttributeError('password contains invalid characters')
+        raise ValidationError('password contains invalid characters')
 
     @password.setter
     def password(self, password):

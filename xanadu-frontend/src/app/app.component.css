@@ -1,0 +1,12 @@
+.navbar {
+  background-color:#e3f2fd;
+}
+.navbar-text {
+  padding-right: 35px;
+  padding-top: 23px;
+}
+.nav-header {
+  padding-top: 10px;
+  font-size: 26px;
+  font-weight: bold;
+}

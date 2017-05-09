@@ -1,0 +1,17 @@
+.bucketlist {
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding-left: 100px;
+  padding-top: 50px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.bucketlist p {
+  font-style: italic;
+  font-weight: bold;
+}
+#view-btn {
+  margin-left: 15px;
+}
+

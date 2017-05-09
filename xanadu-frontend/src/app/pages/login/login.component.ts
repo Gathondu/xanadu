@@ -9,11 +9,7 @@ import { UserService } from "../../services/user.service";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [
-    UserService,
-    AlertService
-  ]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
 
@@ -39,6 +35,7 @@ export class LoginComponent implements OnInit {
     this._user.login(this.model.username, this.model.password)
       .subscribe(
         data => {
+          this._alert.success('Successfully logged in', true);
           this._router.navigate([this.returnUrl]);
             },
         error => {

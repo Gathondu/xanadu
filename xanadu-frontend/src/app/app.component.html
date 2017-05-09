@@ -1,9 +1,18 @@
-<!-- main app container -->
-<div class="jumbotron">
-    <div class="container">
-        <div class="col-sm-8 col-sm-offset-2">
-            <alert></alert>
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-</div>
+<!-- Navigation -->
+<header>
+  <div class="container-fluid">
+    <nav class="navbar navbar-light">
+      <div class="row">
+        <a class="navbar-brand col-md-9 nav-header" [routerLink]="''">Xanadu</a>
+        <p *ngIf="!_router.url.includes('login')" class="navbar-text">Signed in as {{username | uppercase}}</p>
+        <button *ngIf="!_router.url.includes('login')" type="button" class="btn btn-link navbar-btn" [routerLink]="'/login'">Log Out</button>
+      </div>
+    </nav>
+    <br>
+    <hr>
+  </div>
+</header>
+<main>
+  <alert></alert>
+  <router-outlet></router-outlet>
+</main>

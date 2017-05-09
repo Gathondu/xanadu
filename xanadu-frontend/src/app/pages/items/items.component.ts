@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DataService } from "../../services/data.service";
-import { Location } from "@angular/common";
 
 @Component({
   selector: 'items',
   templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  styleUrls: ['./items.component.css'],
 })
 export class ItemsComponent implements OnInit {
 
@@ -14,7 +13,7 @@ export class ItemsComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
-    private _location: Location
+    private _router: Router
   ) { }
 
   ngOnInit() {
@@ -28,6 +27,6 @@ export class ItemsComponent implements OnInit {
       });
   }
   back() {
-    this._location.back();
+    this._router.navigate(['/bucketlist'])
   }
 }

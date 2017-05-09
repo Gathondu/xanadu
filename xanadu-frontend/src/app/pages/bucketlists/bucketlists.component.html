@@ -1,8 +1,21 @@
-<h1>
-  {{ title | uppercase }}
-</h1>
-<div *ngFor="let list of bucketlist['bucketlists']" [routerLink]="['/bucketlist', list.id]">
-    <h2>{{ list.title }}</h2>
-  <p>{{ list.description }}</p>
+<div class="row" style="padding-left:35px;">
+  <h1>{{username | uppercase}} <small class="text-capitalize">{{title}}</small></h1>
+  <nav class="navbar navbar-light" style="padding-left:420px;">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Bucketlist">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </nav>
 </div>
-<p class="error" *ngIf="errorMessage">{{errorMessage}}</p>
+<hr>
+<div class="row">
+  <div *ngFor="let list of bucketlist['bucketlists']" class="col-md-4 bucketlist">
+    <div>
+      <span><h3>{{list.title}}</h3></span>
+      <h4><small>Items in the list {{list.items_count}}</small></h4>
+      <p>{{list.description}}</p>
+      <a [routerLink]="['/bucketlist', list.id]" class="btn btn-primary" id="view-btn"><span class="glyphicon glyphicon-chevron-right"></span>View Bucketlist</a>
+    </div>
+    <hr>
+  </div>
+</div>
