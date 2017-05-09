@@ -12,7 +12,7 @@ export class UserService {
   ) { }
 
   login(username: string, password: string) {
-    let body = JSON.stringify({ username: username, password: password });
+    let body = { username: username, password: password };
     let options = new RequestOptions(new Headers({ 'Content-Type': 'application/json' }));
     return this._http.post(`${this._baseUrl}/auth/login`, body, options)
       .map((res: Response) => {
@@ -35,13 +35,13 @@ export class UserService {
   }
 
   register(model: any) {
-    let body = JSON.stringify({
+    let body = {
       first_name: model.firstName,
       last_name: model.lastName,
       username: model.username,
       email: model.email,
       password: model.password
-    });
+    };
     let options = new RequestOptions(new Headers({ 'Content-Type': 'application/json' }));
     return this._http.post(`${this._baseUrl}/auth/register`, body, options)
     .map(this.extractData)

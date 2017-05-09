@@ -12,8 +12,12 @@
   font-size: 18px;
 }
 
-.navbar-btn {
+.logout-btn {
   margin-right: 35px;
-  margin-top: 6px;
+  margin-top: 15px;
   font-size: 18px;
+}
+.details {
+  position: absolute;
+  right: 30px;
 }

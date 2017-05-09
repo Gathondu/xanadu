@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../../services/data.service";
 import { AlertService } from "../../services/alert.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'bucketlists',
@@ -14,7 +15,8 @@ export class BucketlistsComponent implements OnInit {
   bucketlist = {};
   constructor(
     private _dataService: DataService,
-    private _alert: AlertService
+    private _alert: AlertService,
+    private _route: Router
   ) { }
 
   ngOnInit() {
@@ -24,12 +26,25 @@ export class BucketlistsComponent implements OnInit {
   getBucketList() {
     // get bucketlist objects
     return this._dataService.get('/api/v1.0/bucketlist/')
-    .subscribe(data => {
-      this.bucketlist = data;
-    },
-    error => {
-      this._alert.error(error);
-    });
+      .subscribe(data => {
+        this.bucketlist = data;
+      },
+      error => {
+        this._alert.error(error);
+      });
+  }
+
+  removeList(id) {
+    this._dataService.delete('/api/v1.0/bucketlist/' + id)
+      .subscribe(
+      data => {
+        this._alert.success('Bucketlist Deleted');
+        this.getBucketList();
+      },
+      error => {
+        this._alert.error(error);
+      }
+      );
   }
 
 }

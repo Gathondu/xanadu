@@ -17,10 +17,7 @@ token_auth = HTTPTokenAuth(scheme='Token')
 
 @auth.route('/verify', methods=['POST'])
 def verify():
-    if not request.json:
-        token = json.loads(request.data).get('token')
-    else:
-        token = request.json.get('token')
+    token = request.json.get('token')
     g.current_user = User.verify_auth_token(token)
     return jsonify(g.current_user is not None)
 
@@ -47,12 +44,8 @@ def login():
     """controller for login"""
     if request.method == 'POST':
         try:
-            if not request.json:
-                username = json.loads(request.data).get('username')
-                password = json.loads(request.data).get('password')
-            else:
-                username = request.json.get('username')
-                password = request.json.get('password')
+            username = request.json.get('username')
+            password = request.json.get('password')
             user = User.query.filter_by(email=username).first()
             if not user:
                 return validation_error(ValidationError("User doesn't exist"))
@@ -76,10 +69,7 @@ def register():
     """controller for registering new users"""
     if request.method == 'POST':
         try:
-            if not request.json:
-                user = User.create(json.loads(request.data))
-            else:
-                user = User.create(request.json)
+            user = User.create(request.json)
             db.session.add(user)
             db.session.commit()
             return jsonify({'username': user.nickname,

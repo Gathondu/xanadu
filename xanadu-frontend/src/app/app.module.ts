@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {RouterModule, Routes} from "@angular/router";
-// import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { BucketlistsComponent } from './pages/bucketlists/bucketlists.component';
@@ -18,6 +18,7 @@ import { ListDetailComponent } from './pages/list-detail/list-detail.component';
 import { AlertService } from "app/services/alert.service";
 import { ItemsComponent } from './pages/items/items.component';
 import { UserService } from "app/services/user.service";
+import { BucketlistFormComponent } from './pages/bucketlist-form/bucketlist-form.component';
 
 
 @NgModule({
@@ -29,13 +30,14 @@ import { UserService } from "app/services/user.service";
     RegisterComponent,
     ListDetailComponent,
     ItemsComponent,
+    BucketlistFormComponent,
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
     BrowserModule,
     FormsModule,
     HttpModule,
-    // BrowserAnimationsModule
+    BrowserAnimationsModule
   ],
   providers: [
     AuthenticationService,

@@ -28,7 +28,7 @@ export class AuthguardService implements CanActivate {
   verifyToken() {
     let token: any;
     let url = `${this._baseUrl}/auth/verify`;
-    let body = JSON.stringify({'token': localStorage.getItem('token')});
+    let body = {'token': localStorage.getItem('token')};
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers})
     return this._http.post(url, body, options)

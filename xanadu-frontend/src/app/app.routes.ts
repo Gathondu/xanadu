@@ -6,6 +6,7 @@ import { AppComponent } from "app/app.component";
 import { ListDetailComponent } from "app/pages/list-detail/list-detail.component";
 import { ItemsComponent } from "app/pages/items/items.component";
 import { RegisterComponent } from "app/pages/register/register.component";
+import { BucketlistFormComponent } from "app/pages/bucketlist-form/bucketlist-form.component";
 
 export const AppRoutes = [
   { path: 'login', component: LoginComponent },
@@ -23,6 +24,11 @@ export const AppRoutes = [
     path: 'bucketlist/:id',
     canActivate: [AuthguardService],
     component: ListDetailComponent
+  },
+  {
+    path: 'bucketlist-add',
+    canActivate: [AuthguardService],
+    component: BucketlistFormComponent
   },
   {
     path: 'bucketlist/:bucketlist_id/items/:id',

@@ -12,14 +12,17 @@
       <h2><strong>{{list.title | uppercase}}</strong></h2>
       <h2><small>({{list.description}})</small></h2>
       <div *ngIf="list.items_count > 0">
-      <h3><small>Items in the list {{list.items_count}}</small></h3>
+        <h3><small>Items in the list {{list.items_count}}</small></h3>
       </div>
       <div *ngIf="list.items_count == 0">
-      <h3><small>Empty list</small></h3>
+        <h3><small>Empty list</small></h3>
       </div>
       <h3><small>CREATED: {{list.date_created | date}}</small></h3>
       <h3><small>MODIFIED: {{list.date_modified | date}}</small></h3>
       <a [routerLink]="['/bucketlist', list.id]" class="btn btn-lg btn-primary" id="view-btn">View List <span class="glyphicon glyphicon-chevron-right"></span></a>
+      <a [routerLink]="['/bucketlist-add', list.id, list.title, list.description]" class="btn btn-lg btn-primary" id="view-btn">Edit List <span class="glyphicon glyphicon-pencil"></span></a>
+      <a (click)="removeList(list.id)" class="btn btn-lg btn-danger" id="view-btn">Delete List <span class="glyphicon glyphicon-remove"></span></a>
     </div>
   </div>
 </div>
+<a [routerLink]="['/bucketlist-add']" class="btn btn-lg btn-success" id="add-btn"><span class="glyphicon glyphicon-upload"></span> New List</a>

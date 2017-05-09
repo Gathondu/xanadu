@@ -40,6 +40,7 @@ export class DataService {
 
   put(url, body) {
     url = `${this._baseUrl + url}`;
+    console.log(url);
     let headers = this.createHeader();
     let options = new RequestOptions({headers});
     body = JSON.stringify(body);
