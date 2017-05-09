@@ -42,7 +42,11 @@ def get_items(id):
             'items': [item.read() for item in items],
             'previous': previous,
             'next': next,
-            'count': paginate.total
+            'count': paginate.total,
+            'bucketlist_title': bucketlist.title,
+            'bucketlist_created': bucketlist.created_at,
+            'bucketlist_modified': bucketlist.modified_at,
+            'bucketlist_description': bucketlist.description
             })
     elif request.method == 'POST':
         item = Item.create(request.json, g.current_user, bucketlist)

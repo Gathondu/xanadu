@@ -1,12 +1,19 @@
 .navbar {
   background-color:#e3f2fd;
 }
-.navbar-text {
-  padding-right: 35px;
-  padding-top: 23px;
-}
 .nav-header {
-  padding-top: 10px;
-  font-size: 26px;
+  margin-top: 3px;
+  font-size: 32px;
   font-weight: bold;
+}
+
+.navbar-text {
+  margin-left: 800px;
+  font-size: 18px;
+}
+
+.navbar-btn {
+  margin-right: 35px;
+  margin-top: 6px;
+  font-size: 18px;
 }

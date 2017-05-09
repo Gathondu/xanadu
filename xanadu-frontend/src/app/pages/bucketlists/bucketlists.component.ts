@@ -8,8 +8,7 @@ import { AlertService } from "../../services/alert.service";
   styleUrls: ['./bucketlists.component.css'],
 })
 export class BucketlistsComponent implements OnInit {
-  title = `Welcome to your Bucketlist App`;
-  username = `${localStorage.getItem('username')}`;
+  title = 'Welcome to your Bucketlist App';
 
   errorMessage: string;
   bucketlist = {};

@@ -21,12 +21,12 @@ export class ItemsComponent implements OnInit {
   }
 
   getItem() {
-    return this._dataService.get(`${this._route.snapshot.paramMap.get('location')}`)
+    return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('bucketlist_id')}` + '/items/' + `${this._route.snapshot.paramMap.get('id')}`)
       .subscribe(data => {
         this.item = data;
       });
   }
   back() {
-    this._router.navigate(['/bucketlist'])
+    this._router.navigate(['/bucketlist/'+ `${this._route.snapshot.paramMap.get('bucketlist_id')}`])
   }
 }

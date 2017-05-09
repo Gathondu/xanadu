@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from "../../services/data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { BucketlistsComponent } from "../../pages/bucketlists/bucketlists.component";
-
 @Component({
   selector: 'list-detail',
   templateUrl: './list-detail.component.html',

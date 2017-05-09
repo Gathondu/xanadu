@@ -25,7 +25,7 @@ export const AppRoutes = [
     component: ListDetailComponent
   },
   {
-    path: 'items/:location',
+    path: 'bucketlist/:bucketlist_id/items/:id',
     canActivate: [AuthguardService],
     component: ItemsComponent
   },

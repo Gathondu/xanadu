@@ -1,18 +1,25 @@
-<div class="row">
-  <nav class="navbar navbar-light">
-    <form class="form-inline" style="padding-left:980px;">
-      <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Items">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </nav>
+<div class="row main-row">
+  <h1>{{bucketlist.bucketlist_title | uppercase}}
+  <small>{{bucketlist.bucketlist_description}}</small></h1>
+  <div class="details">
+    <small><strong>Created: </strong>{{bucketlist.bucketlist_created | date}}</small>
+    <small><strong>Last Modified: </strong>{{bucketlist.bucketlist_modified | date}}</small>
+  </div>
+  <form class="form-inline search">
+    <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Items">
+    <button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
 </div>
-<div class="row">
-  <div class="col-md-4 item" *ngFor="let listitem of bucketlist.items">
-    <h1>{{listitem.title}}</h1>
-    <p>{{listitem.content}}</p>
-    <a [routerLink]="['/items', listitem.location]" class="btn btn-primary" id="view-btn"><span class="glyphicon glyphicon-chevron-right"></span>View Item</a>
+<hr>
+<div class="section-items">
+  <div class="row">
+    <div class="col-md-3 rounded jumbotron text-center item" *ngFor="let listitem of bucketlist.items">
+      <h2 class="title"><strong>{{listitem.title | uppercase}}</strong></h2>
+      <h2><small>({{listitem.content}})</small></h2>
+      <h3><small>CREATED: {{listitem.date_created | date}}</small></h3>
+      <h3><small>MODIFIED: {{listitem.date_modified | date}}</small></h3>
+      <a [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]" class="btn btn-primary btn-lg" id="view-btn">View Item <span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
   </div>
 </div>
-<br>
-<br>
-<a (click)="back()" class="col-md-3 btn btn-secondary back">Back</a>
+<a (click)="back()" class="btn btn-lg btn-secondary back"><span class="glyphicon glyphicon-chevron-left"></span> Back</a>

@@ -1,5 +1,9 @@
-<div>
-  <h1>{{item.title}}</h1>
-  <p>{{item.content}}</p>
+<div class="item jumbotron">
+  <h1>{{item.title | uppercase}}</h1>
+  <h3>{{item.content}}</h3>
+  <p>Accomplished <strong>{{item.done}}</strong></p>
+  <small>Created <strong>{{item.date_created | date}}</strong></small>
+  <br>
+  <small>Last Modified <strong>{{item.date_modified | date}}</strong></small>
 </div>
-<a (click)="back()">Back</a>
+<a class="col-md-1 btn btn-secondary back"(click)="back()">Back</a>

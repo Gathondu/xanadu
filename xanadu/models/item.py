@@ -52,6 +52,7 @@ class Item(db.Model):
         """convert list item to json serializable dictionary"""
         json_item = {
             'id': self.id,
+            'bucketlist_id': self.bucketlist_id,
             'location': url_for(
                 'api.get_item', id=self.bucketlist_id,
                 item_id=self.id),

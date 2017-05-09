@@ -9,9 +9,8 @@ import { Router } from "@angular/router";
 })
 export class AppComponent implements OnInit {
   verified: boolean;
-  username: string;
+  username = localStorage.getItem('username');
   constructor(private _router: Router) { }
   ngOnInit() {
-    this.username = localStorage.getItem('username');
   }
 }

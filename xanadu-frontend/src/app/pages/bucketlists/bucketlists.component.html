@@ -1,21 +1,25 @@
-<div class="row" style="padding-left:35px;">
-  <h1>{{username | uppercase}} <small class="text-capitalize">{{title}}</small></h1>
-  <nav class="navbar navbar-light" style="padding-left:420px;">
-    <form class="form-inline">
-      <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Bucketlist">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </nav>
+<div class="row main-row">
+  <h1><small class="text-capitalize">{{title}}</small></h1>
+  <form class="form-inline search">
+    <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Bucketlist">
+    <button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
 </div>
 <hr>
-<div class="row">
-  <div *ngFor="let list of bucketlist['bucketlists']" class="col-md-4 bucketlist">
-    <div>
-      <span><h3>{{list.title}}</h3></span>
-      <h4><small>Items in the list {{list.items_count}}</small></h4>
-      <p>{{list.description}}</p>
-      <a [routerLink]="['/bucketlist', list.id]" class="btn btn-primary" id="view-btn"><span class="glyphicon glyphicon-chevron-right"></span>View Bucketlist</a>
+<div class="section-buckets">
+  <div class="row">
+    <div *ngFor="let list of bucketlist['bucketlists']" class="col-md-3 text-center bucketlist rounded jumbotron">
+      <h2><strong>{{list.title | uppercase}}</strong></h2>
+      <h2><small>({{list.description}})</small></h2>
+      <div *ngIf="list.items_count > 0">
+      <h3><small>Items in the list {{list.items_count}}</small></h3>
+      </div>
+      <div *ngIf="list.items_count == 0">
+      <h3><small>Empty list</small></h3>
+      </div>
+      <h3><small>CREATED: {{list.date_created | date}}</small></h3>
+      <h3><small>MODIFIED: {{list.date_modified | date}}</small></h3>
+      <a [routerLink]="['/bucketlist', list.id]" class="btn btn-lg btn-primary" id="view-btn">View List <span class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
-    <hr>
   </div>
 </div>
