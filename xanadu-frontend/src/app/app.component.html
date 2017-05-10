@@ -1,19 +1,21 @@
 <!-- Navigation -->
 <div class="container-fluid">
-<header>
+  <header>
     <nav class="navbar navbar-light">
       <div class="row">
         <a class="navbar-brand nav-header" [routerLink]="''">Xanadu</a>
+        <h1 *ngIf="showTitle" class="text-capitalize"><small>{{title}}</small></h1>
         <div class="details">
-        <p *ngIf="!_router.url.includes('login') && !_router.url.includes('register')" class="navbar-text">Signed in as {{username | uppercase}}</p>
-        <button *ngIf="!_router.url.includes('login') && !_router.url.includes('register')" type="button" class="btn btn-link logout-btn" [routerLink]="'/login'">Log Out</button>
+          <p *ngIf="!_router.url.includes('login') && !_router.url.includes('register')" class="navbar-text">Signed in as {{username | uppercase}}</p>
+          <button *ngIf="!_router.url.includes('login') && !_router.url.includes('register')" type="button" class="btn btn-link logout-btn"
+            [routerLink]="'/login'">Log Out</button>
         </div>
       </div>
     </nav>
     <hr>
-</header>
-<main>
-  <alert></alert>
-  <router-outlet></router-outlet>
-</main>
+  </header>
+  <main>
+    <alert></alert>
+    <router-outlet></router-outlet>
+  </main>
 </div>

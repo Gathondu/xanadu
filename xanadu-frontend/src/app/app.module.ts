@@ -19,6 +19,7 @@ import { AlertService } from "app/services/alert.service";
 import { ItemsComponent } from './pages/items/items.component';
 import { UserService } from "app/services/user.service";
 import { BucketlistFormComponent } from './pages/bucketlist-form/bucketlist-form.component';
+import { ItemFormComponent } from './pages/item-form/item-form.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { BucketlistFormComponent } from './pages/bucketlist-form/bucketlist-form
     ListDetailComponent,
     ItemsComponent,
     BucketlistFormComponent,
+    ItemFormComponent,
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),

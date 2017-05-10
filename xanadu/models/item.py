@@ -20,7 +20,7 @@ class Item(db.Model):
     __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(20), index=True, nullable=False)
-    body = db.Column(db.UnicodeText())
+    body = db.Column(db.UnicodeText(), default='no content. add item content')
     accomplished = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
@@ -37,9 +37,9 @@ class Item(db.Model):
     def create(item_json, author, bucketlist):
         """save the json object from save into the models"""
         title = item_json.get('title')
-        body = item_json.get('body')
-        if not title or not body:
-            raise ValidationError('item details cannot be empty')
+        body = item_json.get('body') or 'no content. add item content'
+        if not title:
+            raise ValidationError('item title cannot be empty')
         item = Item(
             author=author,
             bucketlist=bucketlist,
@@ -70,6 +70,8 @@ class Item(db.Model):
                 self.title = dict(item_json)[key]
             if key == 'body':
                 self.body = dict(item_json)[key]
+            if key == 'done':
+                self.accomplished = dict(item_json)[key]
         self.modified_at = datetime.utcnow()
         return self
 

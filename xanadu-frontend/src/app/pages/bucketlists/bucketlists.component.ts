@@ -9,17 +9,19 @@ import { Router } from "@angular/router";
   styleUrls: ['./bucketlists.component.css'],
 })
 export class BucketlistsComponent implements OnInit {
-  title = 'Welcome to your Bucketlist App';
 
-  errorMessage: string;
+  member_since = localStorage.getItem('member_since');
+  date = this.member_since.split(',')
   bucketlist = {};
   constructor(
     private _dataService: DataService,
     private _alert: AlertService,
-    private _route: Router
-  ) { }
+    private _router: Router
+  ) {
+  }
 
   ngOnInit() {
+    console.log('date',new Date(this.date[1]));
     this.getBucketList();
   }
 
@@ -34,12 +36,22 @@ export class BucketlistsComponent implements OnInit {
       });
   }
 
+  editList(list) {
+    let params = [
+      { 'id': list.id },
+      { 'title': list.title },
+      { 'description': list.description }
+    ]
+    this._router.navigate(['/bucketlist-add'], { queryParams: { 'list': JSON.stringify(params) } });
+  }
+
   removeList(id) {
     this._dataService.delete('/api/v1.0/bucketlist/' + id)
       .subscribe(
       data => {
-        this._alert.success('Bucketlist Deleted');
+        this._alert.error('Bucketlist Deleted');
         this.getBucketList();
+        window.scrollTo(0, 0);
       },
       error => {
         this._alert.error(error);

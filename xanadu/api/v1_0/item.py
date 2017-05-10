@@ -43,6 +43,7 @@ def get_items(id):
             'previous': previous,
             'next': next,
             'count': paginate.total,
+            'bucketlist_id': bucketlist.id,
             'bucketlist_title': bucketlist.title,
             'bucketlist_created': bucketlist.created_at,
             'bucketlist_modified': bucketlist.modified_at,

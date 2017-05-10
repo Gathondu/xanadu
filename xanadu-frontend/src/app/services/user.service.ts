@@ -21,6 +21,7 @@ export class UserService {
           // store the token of the user in local storage
           localStorage.setItem('token', res.json().token);
           localStorage.setItem('username', res.json().username);
+          localStorage.setItem('member_since', res.json().member_since);
           localStorage.setItem('verified', 'true');
         }
       })
@@ -32,6 +33,7 @@ export class UserService {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('verified');
+    localStorage.removeItem('member_since');
   }
 
   register(model: any) {

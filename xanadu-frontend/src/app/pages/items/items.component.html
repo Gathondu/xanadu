@@ -1,9 +1,17 @@
-<div class="item jumbotron">
-  <h1>{{item.title | uppercase}}</h1>
-  <h3>{{item.content}}</h3>
-  <p>Accomplished <strong>{{item.done}}</strong></p>
-  <small>Created <strong>{{item.date_created | date}}</strong></small>
-  <br>
-  <small>Last Modified <strong>{{item.date_modified | date}}</strong></small>
+<div class="main-row">
+  <a class="col-md-1 btn btn-lg btn-secondary back" (click)="back()"><span class="glyphicon glyphicon-chevron-left"></span> Back</a>
+  <a (click)="editItem(item)" class="btn btn-lg btn-primary" id="edit-btn">Edit Item <span class="glyphicon glyphicon-pencil"></span></a>
+  <a (click)="removeItem(item['id'])" class="btn btn-lg btn-danger" id="delete-btn">Delete Item <span class="glyphicon glyphicon-remove"></span></a>
 </div>
-<a class="col-md-1 btn btn-secondary back"(click)="back()">Back</a>
+<hr>
+<div class="row">
+  <div class="item jumbotron text-center">
+    <h1 (click)="editItem(item)">{{item['title'] | uppercase}}</h1>
+    <h3><small>{{item['content']}}</small></h3>
+    <p>Accomplished <strong>{{item['done']}}</strong></p>
+    <small>Created <strong>{{item['date_created'] | date}}</strong></small>
+    <br>
+    <small>Last Modified <strong>{{item['date_modified'] | date}}</strong></small>
+  </div>
+</div>
+<a class="col-md-1 btn btn-lg btn-secondary back-2" (click)="back()"><span class="glyphicon glyphicon-chevron-left"></span> Back</a>

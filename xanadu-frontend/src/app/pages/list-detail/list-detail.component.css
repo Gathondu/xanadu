@@ -14,7 +14,7 @@
 
 .details {
   margin-top: 5px;
-  margin-left: 30px;
+  margin-left: 15px;
   font-style: italic;
 }
 
@@ -49,13 +49,17 @@ background-color: #cdd1d4;
   padding-left: 200px;
 }
 .back {
-  margin-left: 500px;
+  position: absolute;
+  right: 360px;
 }
+
+#new-btn{
+  position: absolute;
+  right: 250px;
+
+}
+
 #view-btn {
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-.back {
-  margin-top: 15px;
 }
