@@ -3,13 +3,21 @@
   <h1 class="text-capitalize second"><small><strong>Lists:</strong> {{bucketlist['count']}} </small></h1>
   <a [routerLink]="['/bucketlist-add']" class="btn btn-lg btn-success" id="add-btn"><span class="glyphicon glyphicon-upload"></span> Create New List</a>
   <form class="form-inline search">
-    <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Bucketlist">
-    <button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <input class="form-control col-sm-5" type="number" min="1" name="page" placeholder="List Per Page" #page id="page-box"
+      (change)="paginate(page.value)">
+    <input class="form-control" type="text" name="search" placeholder="Search Bucketlist" #searchBox id="search-box"
+      (keyup)="search(searchBox.value)">
+    <!--<button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
   </form>
 </div>
 <hr>
 <div class="section-buckets">
-  <div class="row">
+  <div class="row-fluid">
+    <div *ngIf="_paginate" class="row paginate">
+      <a (click)="goTo(bucketlist['previous'])" id="previous"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <h3><small>Page {{bucketlist['page']}}</small></h3>
+      <a (click)="goTo(bucketlist['next'])" id="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
     <div *ngIf="bucketlist['count'] > 0">
       <div *ngFor="let list of bucketlist['bucketlists']" class="col-md-3 text-center bucketlist rounded jumbotron">
         <h2 [routerLink]="['/bucketlist', list.id]"><strong>{{list.title | uppercase}}</strong></h2>
@@ -27,8 +35,11 @@
         <a (click)="removeList(list.id)" class="btn btn-lg btn-danger" id="view-btn">Delete List <span class="glyphicon glyphicon-remove"></span></a>
       </div>
     </div>
-    <div *ngIf="bucketlist['count'] == 0" class="col-lg-7 text-center alert alert-warning" role="alert">
+    <div *ngIf="bucketlist['count'] == 0 && !_search" class="col-lg-7 text-center alert alert-warning" role="alert">
       <strong>Warning!</strong> You currently don't have any lists.
+    </div>
+    <div *ngIf="bucketlist['count'] == 0 && _search" class="col-lg-7 text-center alert alert-warning" role="alert">
+      <strong>Warning!</strong> You're search did not match any bucketlist.
     </div>
   </div>
 </div>

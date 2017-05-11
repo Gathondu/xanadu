@@ -59,7 +59,7 @@ def login():
                             'Location':
                             url_for(
                                 'api.get_user',
-                                id=g.current_user.id, _external=True),
+                                id=g.current_user.id),
                                 'token': token.decode('ascii'),
                                 'expiration': 3600})
         except ValidationError as e:
@@ -77,6 +77,6 @@ def register():
             return jsonify({'username': user.nickname,
                             'Location': url_for(
                                 'api.get_user',
-                                id=user.id, _external=True)}), 201
+                                id=user.id)}), 201
         except ValidationError as e:
             return validation_error(e)

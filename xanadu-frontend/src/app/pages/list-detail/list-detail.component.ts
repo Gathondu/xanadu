@@ -11,6 +11,8 @@ import { AlertService } from "../../services/alert.service";
 })
 export class ListDetailComponent implements OnInit {
 
+  _search = false;
+  _paginate = false;
   bucketlist = {};
   item = {};
   constructor(
@@ -41,6 +43,46 @@ export class ListDetailComponent implements OnInit {
       { 'body': item.content }
     ]
     this._router.navigate(['/item-add'], { queryParams: { 'item': JSON.stringify(params) } });
+  }
+  search(title: string) {
+    if (title) {
+      this._search = true;
+    } else {
+      this._search = false;
+    }
+    //search function
+    return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?q=' + title)
+      .subscribe(data => {
+        this.bucketlist = data;
+      },
+      error => {
+        this._alert.error(error);
+      });
+  }
+    paginate(num: number) {
+    if (num) {
+      this._paginate = true;
+    } else {
+      this._paginate = false;
+    }
+    //search function
+    return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?limit=' + num)
+      .subscribe(data => {
+        this.bucketlist = data;
+      },
+      error => {
+        this._alert.error(error);
+      });
+  }
+
+  goTo(url: string) {
+    if(url) {
+    return this._dataService.get(url)
+      .subscribe(data =>
+      { this.bucketlist = data; },
+      error => { this._alert.error(error); }
+      );
+    }
   }
 
   removeItem(id) {

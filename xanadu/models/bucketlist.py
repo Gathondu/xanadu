@@ -55,8 +55,8 @@ class BucketList(db.Model):
             'date_created': str(self.created_at),
             'date_modified': str(self.modified_at),
             'created_by': url_for(
-                'api.get_user', id=self.user_id, _external=True),
-            'items': url_for('api.get_items', id=self.id, _external=True),
+                'api.get_user', id=self.user_id),
+            'items': url_for('api.get_items', id=self.id),
             'items_count': len(self.items)
             }
         return json_list

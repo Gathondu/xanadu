@@ -9,7 +9,7 @@
 
 .search {
   position: absolute;
-  right: 30px;
+  right: 60px;
 }
 
 .details {
@@ -48,18 +48,28 @@ background-color: #cdd1d4;
 .section-items {
   padding-left: 200px;
 }
+
 .back {
   position: absolute;
-  right: 360px;
+  right: 430px;
 }
 
 #new-btn{
   position: absolute;
-  right: 250px;
+  right: 320px;
 
 }
 
 #view-btn {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+#page-box {
+  margin-right: 5px;
+}
+
+.paginate {
+  position: absolute;
+  right:60px;
 }

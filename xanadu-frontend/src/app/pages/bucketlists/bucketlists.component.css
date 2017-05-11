@@ -31,12 +31,12 @@
 
 .search {
   position: absolute;
-  right: 30px;
+  right: 60px;
 }
 
 #add-btn {
   position: absolute;
-  right: 250px;
+  right: 330px;
 }
 
 .main-row {
@@ -50,3 +50,14 @@
 .second {
   margin-left: 35px;
 }
+
+#page-box {
+  margin-right: 5px;
+}
+
+.paginate {
+  position: absolute;
+  right:60px;
+}
+
+

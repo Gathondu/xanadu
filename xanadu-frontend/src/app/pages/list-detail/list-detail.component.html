@@ -4,31 +4,39 @@
   <div class="details">
     <small><strong>Created: </strong>{{bucketlist['bucketlist_created'] | date}}</small>
     <small><strong>Last Modified: </strong>{{bucketlist['bucketlist_modified'] | date}}</small>
-    <small><strong>Items: </strong>{{bucketlist['count']}}</small>
   </div>
   <a (click)="back()" class="btn btn-lg btn-secondary back"><span class="glyphicon glyphicon-chevron-left"></span> Back</a>
   <a (click)="addItem()" class="btn btn-lg btn-success" id="new-btn"><span class="glyphicon glyphicon-upload"></span> New Item</a>
   <form class="form-inline search">
-    <input class="form-control mr-sm-2" type="text" name="search" placeholder="Search Items">
-    <button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <input class="form-control col-sm-5" type="number" min="1" name="page" placeholder="List Per Page" #page id="page-box" (change)="paginate(page.value)">
+    <input class="form-control" type="text" name="search" placeholder="Search Items" #searchBox id="search-box" (keyup)="search(searchBox.value)">
+    <!--<button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
   </form>
 </div>
 <hr>
 <div class="section-items">
-  <div class="row">
+  <div class="row-fluid">
+    <div *ngIf="_paginate" class="row paginate">
+      <a (click)="goTo(bucketlist['previous'])" id="previous"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <h3><small>Page {{bucketlist['page']}}</small></h3>
+      <a (click)="goTo(bucketlist['next'])" id="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
     <div *ngIf="bucketlist['count'] > 0">
-    <div class="col-md-3 rounded jumbotron text-center item" *ngFor="let listitem of bucketlist['items']">
-      <h2 [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]" class="title"><strong>{{listitem.title | uppercase}}</strong></h2>
-      <h2><small>({{listitem.content}})</small></h2>
-      <h3><small>CREATED: {{listitem.date_created | date}}</small></h3>
-      <h3><small>MODIFIED: {{listitem.date_modified | date}}</small></h3>
-      <a [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]" class="btn btn-primary btn-lg" id="view-btn">View Item <span class="glyphicon glyphicon-chevron-right"></span></a>
-      <a (click)="editItem(listitem)" class="btn btn-lg btn-primary" id="view-btn">Edit Item <span class="glyphicon glyphicon-pencil"></span></a>
-      <a (click)="removeItem(listitem.id)" class="btn btn-lg btn-danger" id="view-btn">Delete Item <span class="glyphicon glyphicon-remove"></span></a>
+      <div class="col-md-3 rounded jumbotron text-center item" *ngFor="let listitem of bucketlist['items']">
+        <h2 [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]" class="title"><strong>{{listitem.title | uppercase}}</strong></h2>
+        <h2><small>({{listitem.content}})</small></h2>
+        <h3><small>CREATED: {{listitem.date_created | date}}</small></h3>
+        <h3><small>MODIFIED: {{listitem.date_modified | date}}</small></h3>
+        <a [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]" class="btn btn-primary btn-lg" id="view-btn">View Item <span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a (click)="editItem(listitem)" class="btn btn-lg btn-primary" id="view-btn">Edit Item <span class="glyphicon glyphicon-pencil"></span></a>
+        <a (click)="removeItem(listitem.id)" class="btn btn-lg btn-danger" id="view-btn">Delete Item <span class="glyphicon glyphicon-remove"></span></a>
+      </div>
     </div>
-    </div>
-    <div *ngIf="bucketlist['count'] == 0" class="col-lg-7 text-center alert alert-warning" role="alert">
+    <div *ngIf="bucketlist['count'] == 0 && !_search" class="col-lg-7 text-center alert alert-warning" role="alert">
       <strong>Warning!</strong> You currently don't have any items.
+    </div>
+    <div *ngIf="bucketlist['count'] == 0 && _search" class="col-lg-7 text-center alert alert-warning" role="alert">
+      <strong>Warning!</strong> You're search did not match any items.
     </div>
   </div>
 </div>

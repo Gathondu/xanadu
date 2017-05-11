@@ -12,6 +12,8 @@ export class BucketlistsComponent implements OnInit {
 
   member_since = localStorage.getItem('member_since');
   date = this.member_since.split(',')
+  _search = false;
+  _paginate = false;
   bucketlist = {};
   constructor(
     private _dataService: DataService,
@@ -21,7 +23,6 @@ export class BucketlistsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('date',new Date(this.date[1]));
     this.getBucketList();
   }
 
@@ -35,6 +36,49 @@ export class BucketlistsComponent implements OnInit {
         this._alert.error(error);
       });
   }
+
+  search(title: string) {
+    if (title) {
+      this._search = true;
+    } else {
+      this._search = false;
+    }
+    //search function
+    return this._dataService.get('/api/v1.0/bucketlist/?q=' + title)
+      .subscribe(data => {
+        this.bucketlist = data;
+      },
+      error => {
+        this._alert.error(error);
+      });
+  }
+
+  paginate(num: number) {
+    if (num) {
+      this._paginate = true;
+    } else {
+      this._paginate = false;
+    }
+    //search function
+    return this._dataService.get('/api/v1.0/bucketlist/?limit=' + num)
+      .subscribe(data => {
+        this.bucketlist = data;
+      },
+      error => {
+        this._alert.error(error);
+      });
+  }
+
+  goTo(url: string) {
+    if(url) {
+    return this._dataService.get(url)
+      .subscribe(data =>
+      { this.bucketlist = data; },
+      error => { this._alert.error(error); }
+      );
+    }
+  }
+
 
   editList(list) {
     let params = [

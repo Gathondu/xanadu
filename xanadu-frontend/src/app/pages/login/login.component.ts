@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
-    this._user.login(this.model.username, this.model.password)
+    this._user.login(this.model.email, this.model.password)
       .subscribe(
         data => {
           this._alert.success('Successfully logged in', true);

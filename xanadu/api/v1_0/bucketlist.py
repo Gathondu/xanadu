@@ -28,13 +28,14 @@ def get_lists():
         bucketlists = paginate.items
         previous = None
         if paginate.has_prev:
-            previous = url_for('api.get_lists', page=page-1, limit=limit, _external=True)
+            previous = url_for('api.get_lists', page=page-1, limit=limit)
         next = None
         if paginate.has_next:
-            next = url_for('api.get_lists', page=page+1, limit=limit, _external=True)
+            next = url_for('api.get_lists', page=page+1, limit=limit)
         return jsonify({
             'bucketlists': [bucket.read() for bucket in bucketlists],
             'previous': previous,
+            'page': page,
             'next': next,
             'count': paginate.total
             })

@@ -34,13 +34,14 @@ def get_items(id):
         items = paginate.items
         previous = None
         if paginate.has_prev:
-            previous = url_for('api.get_items', id=id, page=page-1, limit=limit, _external=True)
+            previous = url_for('api.get_items', id=id, page=page-1, limit=limit)
         next = None
         if paginate.has_next:
-            next  = url_for('api.get_items', id=id, page=page+1, limit=limit, _external=True)
+            next = url_for('api.get_items', id=id, page=page+1, limit=limit)
         return jsonify({
             'items': [item.read() for item in items],
             'previous': previous,
+            'page': page,
             'next': next,
             'count': paginate.total,
             'bucketlist_id': bucketlist.id,

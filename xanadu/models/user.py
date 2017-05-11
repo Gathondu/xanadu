@@ -79,7 +79,7 @@ class User(db.Model):
     def read(self):
         """convert user to json serializable dictionary"""
         json_user = {
-            'location': url_for('api.get_user', id=self.id, _external=True),
+            'location': url_for('api.get_user', id=self.id),
             'first_name': self.first_name,
             'last_name': self.last_name,
             'username': self.nickname,
