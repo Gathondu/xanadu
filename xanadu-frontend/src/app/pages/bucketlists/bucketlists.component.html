@@ -1,6 +1,6 @@
 <div class="row main-row">
   <h1 class="text-capitalize"><small><strong>Member For:</strong> {{date[0] }}</small></h1>
-  <h1 class="text-capitalize second"><small><strong>Lists:</strong> {{bucketlist['count']}} </small></h1>
+  <h1 class="text-capitalize second"><small><strong>Bucketlists:</strong> {{bucketlist['count']}} </small></h1>
   <a [routerLink]="['/bucketlist-add']" class="btn btn-lg btn-success" id="add-btn"><span class="glyphicon glyphicon-upload"></span> Create New List</a>
   <form class="form-inline search">
     <input class="form-control col-sm-5" type="number" min="1" name="page" placeholder="List Per Page" #page id="page-box"
