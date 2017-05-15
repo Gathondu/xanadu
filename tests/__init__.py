@@ -40,46 +40,38 @@ class BaseTestCase(unittest.TestCase):
             )
         self.bucketlist = BucketList(
             title='places',
-            description="places i'd love to visit.",
             author=self.user
             )
         self.bucketlist2 = BucketList(
             title='cars',
-            description="cars i want to own.",
             author=self.user
             )
         self.bucketlist3 = BucketList(
             title='home visit',
-            description="visit home",
             author=self.user2
             )
         self.item = Item(
             title='my first vacation',
-            body='visit paris and get to learn about their cuisine.',
             author=self.user,
             bucketlist=self.bucketlist
             )
         self.item2 = Item(
             title='my second vacation',
-            body='visit oahu.',
             author=self.user,
             bucketlist=self.bucketlist
             )
         self.item3 = Item(
             title='buy a car',
-            body='BMW M3 sport edition.',
             author=self.user,
             bucketlist=self.bucketlist2
             )
         self.item4 = Item(
             title='visit parents',
-            body='go back home to kenya and visit with my parents and family.',
             author=self.user2,
             bucketlist=self.bucketlist3
             )
         self.item5 = Item(
             title='go bungee jumping',
-            body="take a holiday in sagana where i'll go bungee jumping.",
             author=self.user2,
             bucketlist=self.bucketlist3
             )
@@ -105,7 +97,6 @@ class BaseTestCase(unittest.TestCase):
         """test that a user can log in"""
         response = self.client.post(
             url_for('auth.login'),
-            data=json.dumps(
-                {'username': 'thundoss@gmail.com', 'password': 'denno'}),
-            content_type='application/json')
-        return json.loads(response.data)[1]['token']
+            data=json.dumps({'username': 'thundoss@gmail.com', 'password': 'denno'}),
+            headers={'content_type': 'application/json'})
+        return json.loads(response.data)['token']

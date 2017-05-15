@@ -13,7 +13,7 @@ db = SQLAlchemy()
 
 def create_app(config_name):
     """
-    Factory function to create the app
+    Factory function to create the xanadu
     """
     xanadu = Flask(__name__)
     xanadu.config.from_object(config[config_name])

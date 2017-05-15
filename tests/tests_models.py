@@ -9,6 +9,7 @@ from xanadu import db
 from xanadu.models.user import User
 from xanadu.models.bucketlist import BucketList
 from xanadu.models.item import Item
+from xanadu.exceptions import ValidationError
 
 
 class UserTestCase(BaseTestCase):
@@ -30,7 +31,7 @@ class UserTestCase(BaseTestCase):
         self.assertEqual(2, len(User.query.all()))
 
     def test_cannot_get_password(self):
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(ValidationError):
             self.user.password
 
     def test_password_verification(self):

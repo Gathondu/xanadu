@@ -5,7 +5,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     """
-    Settings for the app
+    Settings for the xanadu
     """
     DEBUG = True
     ITEMS_PER_LIST = 10
@@ -17,7 +17,7 @@ class Config:
 
     @staticmethod
     def init_app(app):
-        """Initialize the app"""
+        """Initialize the xanadu"""
         pass
 
 

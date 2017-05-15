@@ -1,0 +1,28 @@
+.navbar {
+  background-color:#e3f2fd;
+}
+.nav-header {
+  margin-top: 3px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.row h1 {
+  font-size: 40px;
+  margin-top: 3px;
+}
+
+.navbar-text {
+  margin-left: 800px;
+  font-size: 18px;
+}
+
+.logout-btn {
+  margin-right: 35px;
+  margin-top: 15px;
+  font-size: 18px;
+}
+.details {
+  position: absolute;
+  right: 30px;
+}
