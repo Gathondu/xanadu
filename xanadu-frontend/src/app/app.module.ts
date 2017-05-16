@@ -20,6 +20,7 @@ import { ItemsComponent } from './pages/items/items.component';
 import { UserService } from "app/services/user.service";
 import { BucketlistFormComponent } from './pages/bucketlist-form/bucketlist-form.component';
 import { ItemFormComponent } from './pages/item-form/item-form.component';
+import { HomeComponent } from './pages/home/home.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { ItemFormComponent } from './pages/item-form/item-form.component';
     ItemsComponent,
     BucketlistFormComponent,
     ItemFormComponent,
+    HomeComponent,
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
