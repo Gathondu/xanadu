@@ -20,7 +20,7 @@ class BucketList(db.Model):
     __tablename__ = 'bucketlist'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(20), index=True, nullable=False)
-    description = db.Column(db.Unicode(100), default='no description. add list description')
+    description = db.Column(db.Unicode(100), default='')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

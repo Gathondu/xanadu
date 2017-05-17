@@ -8,12 +8,14 @@ import { ItemsComponent } from "app/pages/items/items.component";
 import { RegisterComponent } from "app/pages/register/register.component";
 import { BucketlistFormComponent } from "app/pages/bucketlist-form/bucketlist-form.component";
 import { ItemFormComponent } from "app/pages/item-form/item-form.component";
+import { HomeComponent } from "app/pages/home/home.component";
 
 export const AppRoutes = [
   { path: 'login', component: LoginComponent },
+  { path: 'index', component: HomeComponent },
   {
     path: '',
-    redirectTo: '/bucketlist',
+    redirectTo: '/index',
     pathMatch: 'full'
   },
   {
@@ -47,7 +49,7 @@ export const AppRoutes = [
   },
   {
     path: '**',
-    redirectTo: '/bucketlist',
+    redirectTo: '/index',
     pathMatch: 'full'
   }
 ];

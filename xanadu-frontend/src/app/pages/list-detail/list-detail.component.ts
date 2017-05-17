@@ -44,6 +44,16 @@ export class ListDetailComponent implements OnInit {
     ]
     this._router.navigate(['/item-add'], { queryParams: { 'item': JSON.stringify(params) } });
   }
+
+  editList() {
+    let params = [
+      { 'id': this.bucketlist['bucketlist_id'] },
+      { 'title': this.bucketlist['bucketlist_title'] },
+      { 'description': this.bucketlist['bucketlist_description'] }
+    ]
+    this._router.navigate(['/bucketlist-add'], { queryParams: { 'list': JSON.stringify(params) } });
+  }
+
   search(title: string) {
     if (title) {
       this._search = true;
@@ -59,29 +69,31 @@ export class ListDetailComponent implements OnInit {
         this._alert.error(error);
       });
   }
-    paginate(num: number) {
-    if (num) {
+  paginate(num: number) {
+    console.log('page', num);
+    if (num > 0) {
       this._paginate = true;
+      //paginate function
+      return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?limit=' + num)
+        .subscribe(data => {
+          this.bucketlist = data;
+        },
+        error => {
+          this._alert.error(error);
+        });
     } else {
       this._paginate = false;
+      this.getList();
     }
-    //search function
-    return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?limit=' + num)
-      .subscribe(data => {
-        this.bucketlist = data;
-      },
-      error => {
-        this._alert.error(error);
-      });
   }
 
   goTo(url: string) {
-    if(url) {
-    return this._dataService.get(url)
-      .subscribe(data =>
-      { this.bucketlist = data; },
-      error => { this._alert.error(error); }
-      );
+    if (url) {
+      return this._dataService.get(url)
+        .subscribe(data =>
+        { this.bucketlist = data; },
+        error => { this._alert.error(error); }
+        );
     }
   }
 

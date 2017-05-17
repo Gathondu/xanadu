@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this._user.logout();
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '';
+    // get return url from route parameters or default to '/bucketlist'
+    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/bucketlist';
   }
 
   login() {

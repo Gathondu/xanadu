@@ -1,9 +1,14 @@
+import { MaterialModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {RouterModule, Routes} from "@angular/router";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MyMaterialModule } from "../app/services/material.module";
+import { CarouselModule } from 'ngx-bootstrap';
+import 'hammerjs'
 
 import { AppComponent } from './app.component';
 import { BucketlistsComponent } from './pages/bucketlists/bucketlists.component';
@@ -41,7 +46,10 @@ import { HomeComponent } from './pages/home/home.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    BrowserAnimationsModule
+    MaterialModule,
+    BrowserAnimationsModule,
+    MyMaterialModule,
+    CarouselModule
   ],
   providers: [
     AuthenticationService,
