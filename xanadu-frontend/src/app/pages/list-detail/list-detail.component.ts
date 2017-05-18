@@ -70,7 +70,6 @@ export class ListDetailComponent implements OnInit {
       });
   }
   paginate(num: number) {
-    console.log('page', num);
     if (num > 0) {
       this._paginate = true;
       //paginate function

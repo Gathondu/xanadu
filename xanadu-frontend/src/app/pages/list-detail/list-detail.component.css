@@ -61,33 +61,33 @@
 .grid {
   width: 90%;
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 68px;
 }
 .item {
   margin-left: 10px;
 }
 
 #previous {
-  width: 66%;
+  width: 10%;
 }
 
 #next {
+  margin-left: 122px;
   margin-top: -48px;
-  margin-left: 100px;
-  width: 66%;
+  padding-left:90px;
+  position: absolute;
+  width: 13%;
 }
 
 .page-text {
   margin-top: -39px;
   position: absolute;
-  margin-left: 55px;
+  margin-left: 100px;
 }
 
-.paginate {
-  position: absolute;
-  width: 10%;
-  float: left;
-  margin-top: 20px;
+.grid-style {
+  width: 90%;
+  margin-left: 30px;
 }
 
 #search-box {
