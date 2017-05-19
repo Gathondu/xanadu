@@ -31,7 +31,7 @@ class ClientTestCase(BaseTestCase):
             url_for('auth.login'),
             data=json.dumps({
                 'username': 'thundoss@gmail.com',
-                'password': 'password'}),
+                'password': 'denno'}),
             content_type='application/json')
         self.assertEqual(200, response.status_code)
 

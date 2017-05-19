@@ -4,7 +4,7 @@ Api endpoint for the bucketlist
 from flask import current_app, g, jsonify, request, url_for
 
 from xanadu.api.v1_0 import api
-from xanadu.api.v1_0.errors import unauthorized
+from xanadu.api.v1_0.errors import not_found, forbidden
 from xanadu import db
 from xanadu.models.user import User
 from xanadu.models.bucketlist import BucketList
@@ -28,13 +28,14 @@ def get_lists():
         bucketlists = paginate.items
         previous = None
         if paginate.has_prev:
-            previous = url_for('api.get_lists', page=page-1, limit=limit, _external=True)
+            previous = url_for('api.get_lists', page=page-1, limit=limit)
         next = None
         if paginate.has_next:
-            next = url_for('api.get_lists', page=page+1, limit=limit, _external=True)
+            next = url_for('api.get_lists', page=page+1, limit=limit)
         return jsonify({
             'bucketlists': [bucket.read() for bucket in bucketlists],
             'previous': previous,
+            'page': page,
             'next': next,
             'count': paginate.total
             })
@@ -48,8 +49,10 @@ def get_lists():
 @api.route('/bucketlist/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def get_one_list(id):
     bucketlist = BucketList.query.filter_by(id=id).first()
-    if not bucketlist.authenticate_user(g.current_user.id):
-        return unauthorized('resource does not belong to current user')
+    if not bucketlist:
+        return not_found('user with id {} does not exist'.format(id))
+    elif not bucketlist.authenticate_user(g.current_user.id):
+        return forbidden('resource does not belong to user with id {}'.format(g.current_user.id))
     elif request.method == 'GET':
         return jsonify(bucketlist.read())
     elif request.method == 'PUT':

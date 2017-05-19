@@ -1,0 +1,45 @@
+<div class="row main-row">
+  <h1 class="text-capitalize"><small><strong>Member For:</strong> {{date[0] }}</small></h1>
+  <h1 class="text-capitalize second"><small><strong>Bucketlists:</strong> {{bucketlist['count']}} </small></h1>
+  <a [routerLink]="['/bucketlist-add']" class="btn btn-lg btn-success" id="add-btn"><span class="glyphicon glyphicon-upload"></span> Create New List</a>
+  <form class="form-inline search">
+    <input class="form-control col-sm-5" type="number" min="1" name="page" placeholder="List Per Page" #page id="page-box"
+      (change)="paginate(page.value)">
+    <input class="form-control" type="text" name="search" placeholder="Search Bucketlist" #searchBox id="search-box"
+      (keyup)="search(searchBox.value)">
+    <!--<button class="btn btn-lg btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+  </form>
+</div>
+<hr>
+<div class="section-buckets">
+  <div class="row-fluid">
+    <div *ngIf="_paginate" class="row paginate">
+      <a (click)="goTo(bucketlist['previous'])" id="previous"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <h3><small>Page {{bucketlist['page']}}</small></h3>
+      <a (click)="goTo(bucketlist['next'])" id="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+    <div *ngIf="bucketlist['count'] > 0">
+      <div *ngFor="let list of bucketlist['bucketlists']" class="col-md-3 text-center bucketlist rounded jumbotron">
+        <h2 [routerLink]="['/bucketlist', list.id]"><strong>{{list.title | uppercase}}</strong></h2>
+        <h2><small>({{list.description}})</small></h2>
+        <div *ngIf="list.items_count > 0">
+          <h3><small>Items in the list {{list.items_count}}</small></h3>
+        </div>
+        <div *ngIf="list.items_count == 0">
+          <h3><small>Empty list</small></h3>
+        </div>
+        <h3><small>CREATED: {{list.date_created | date}}</small></h3>
+        <h3><small>MODIFIED: {{list.date_modified | date}}</small></h3>
+        <a [routerLink]="['/bucketlist', list.id]" class="btn btn-lg btn-primary" id="view-btn">View List <span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a (click)="editList(list)" class="btn btn-lg btn-primary" id="view-btn">Edit List <span class="glyphicon glyphicon-pencil"></span></a>
+        <a (click)="removeList(list.id)" class="btn btn-lg btn-danger" id="view-btn">Delete List <span class="glyphicon glyphicon-remove"></span></a>
+      </div>
+    </div>
+    <div *ngIf="bucketlist['count'] == 0 && !_search" class="col-lg-7 text-center alert alert-warning" role="alert">
+      <strong>Warning!</strong> You currently don't have any lists.
+    </div>
+    <div *ngIf="bucketlist['count'] == 0 && _search" class="col-lg-7 text-center alert alert-warning" role="alert">
+      <strong>Warning!</strong> You're search did not match any bucketlist.
+    </div>
+  </div>
+</div>

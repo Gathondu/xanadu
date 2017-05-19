@@ -3,12 +3,17 @@ import os
 
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
+from flask_cors import CORS
 
 from xanadu import create_app, db
 from xanadu.models import user, bucketlist, item
 
 
-xanadu = create_app(os.getenv('FLASK_CONFIG', 'default'))
+if not os.getenv('FLASK_CONFIG'):
+    xanadu = create_app('default')
+    CORS(xanadu)
+else:
+    xanadu = create_app(os.getenv('FLASK_CONFIG'))
 manager = Manager(xanadu)
 
 # database migration logic added to manager

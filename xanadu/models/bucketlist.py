@@ -20,7 +20,7 @@ class BucketList(db.Model):
     __tablename__ = 'bucketlist'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(20), index=True, nullable=False)
-    description = db.Column(db.Unicode(100))
+    description = db.Column(db.Unicode(100), default='no description. add list description')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -35,9 +35,9 @@ class BucketList(db.Model):
     def create(list_json, author):
         """get details from json object"""
         title = list_json.get('title')
-        description = list_json.get('description')
-        if not title or not description:
-            raise ValidationError('list details must all be provided')
+        description = list_json.get('description') or 'no description. add list description'
+        if not title:
+            raise ValidationError('list title must be provided')
         bucketlist = BucketList(
             author=author,
             title=title,
@@ -55,8 +55,8 @@ class BucketList(db.Model):
             'date_created': str(self.created_at),
             'date_modified': str(self.modified_at),
             'created_by': url_for(
-                'api.get_user', id=self.user_id, _external=True),
-            'items': url_for('api.get_items', id=self.id, _external=True),
+                'api.get_user', id=self.user_id),
+            'items': url_for('api.get_items', id=self.id),
             'items_count': len(self.items)
             }
         return json_list

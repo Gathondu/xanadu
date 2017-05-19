@@ -1,0 +1,63 @@
+.bucketlist {
+  margin: 5px;
+  padding: 5px;
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.bucketlist:hover {
+  background-color: #cdd1d4;
+}
+
+.section-buckets {
+  padding-left: 200px;
+}
+
+.bucketlist h2 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.bucketlist h2 small {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.bucketlist h3 small {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.search {
+  position: absolute;
+  right: 60px;
+}
+
+#add-btn {
+  position: absolute;
+  right: 330px;
+}
+
+.main-row {
+  margin-left: 35px;
+}
+
+#view-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.second {
+  margin-left: 35px;
+}
+
+#page-box {
+  margin-right: 5px;
+}
+
+.paginate {
+  position: absolute;
+  right:60px;
+}
+
+

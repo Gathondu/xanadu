@@ -1,0 +1,75 @@
+.main-row {
+  margin-left: 35px;
+}
+
+.main-row h1 {
+  margin-top: 3px;
+  font-weight: 650px;
+}
+
+.search {
+  position: absolute;
+  right: 60px;
+}
+
+.details {
+  margin-top: 5px;
+  margin-left: 15px;
+  font-style: italic;
+}
+
+.item {
+  margin: 5px;
+  padding: 5px;
+  padding-top
+  : 15px;
+  padding-right: 15px;
+  padding-left
+  : 15px;
+}
+
+.item h2 small {
+  font-weight: bold;
+}
+
+.item h3 small{
+  font-style: italic;
+  font-weight: bold;
+}
+.item:hover{
+background-color: #cdd1d4;
+}
+
+.title {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.section-items {
+  padding-left: 200px;
+}
+
+.back {
+  position: absolute;
+  right: 430px;
+}
+
+#new-btn{
+  position: absolute;
+  right: 320px;
+
+}
+
+#view-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#page-box {
+  margin-right: 5px;
+}
+
+.paginate {
+  position: absolute;
+  right:60px;
+}

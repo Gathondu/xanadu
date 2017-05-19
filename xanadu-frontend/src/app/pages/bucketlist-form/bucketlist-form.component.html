@@ -1,0 +1,21 @@
+<div class="container">
+  <h1><strong>{{heading | uppercase}}</strong></h1>
+  <div class="row jumbotron">
+    <form class="col-lg-7" (ngSubmit)="addList()" #bucketListForm="ngForm">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" [(ngModel)]="model.title" required #title="ngModel">
+        <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+          Bucketlist's title is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" placeholder="OPTIONAL" name="description" [(ngModel)]="model.description"
+          #description="ngModel">
+      </div>
+      <button type="submit" class="btn btn-success" [disabled]="!bucketListForm.form.valid">Save</button>
+      <a class="btn btn-link" routerLink="/bucketlist">Cancel</a>
+    </form>
+  </div>
+</div>
