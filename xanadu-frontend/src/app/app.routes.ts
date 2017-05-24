@@ -12,10 +12,10 @@ import { HomeComponent } from "app/pages/home/home.component";
 
 export const AppRoutes = [
   { path: 'login', component: LoginComponent },
-  { path: 'index', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
   {
     path: '',
-    redirectTo: '/index',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
@@ -49,7 +49,7 @@ export const AppRoutes = [
   },
   {
     path: '**',
-    redirectTo: '/index',
+    redirectTo: '/home',
     pathMatch: 'full'
   }
 ];

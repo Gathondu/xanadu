@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../../services/data.service";
 import { AlertService } from "../../services/alert.service";
+import { AppComponent } from "../../app.component";
 
 @Component({
   selector: 'app-home',
@@ -11,28 +12,19 @@ export class HomeComponent implements OnInit {
 
   title = "welcome to your bucketlist app";
   showTitle = true;
+  loggedIn = false;
   bucketlist = {};
   created = [];
   modified = [];
   completed = [];
   constructor(
     private _data: DataService,
-    private _alert: AlertService
+    private _alert: AlertService,
+    private _app: AppComponent
   ) { }
 
   ngOnInit() {
     setTimeout(function () { this.showTitle = false }.bind(this), 7500);
-    this.getBucketlists();
-  }
-
-  getBucketlists() {
-    // get bucketlist objects
-    return this._data.get('/api/v1.0/bucketlist/')
-      .subscribe(data => {
-        this.bucketlist = data;
-      },
-      error => {
-        this._alert.error(error);
-      });
+    this.loggedIn = this._app.loggedIn;
   }
 }

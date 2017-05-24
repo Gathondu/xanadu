@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { MdDialog, MdDialogRef } from "@angular/material";
 import { DataService } from "../../services/data.service";
 import { AlertService } from "../../services/alert.service";
-import { Router } from "@angular/router";
+import { BucketlistFormComponent } from "../../pages/bucketlist-form/bucketlist-form.component";
 
 @Component({
   selector: 'bucketlists',
@@ -15,12 +17,13 @@ export class BucketlistsComponent implements OnInit {
   _search = false;
   _paginate = false;
   bucketlist = {};
+  list = {};
   constructor(
     private _dataService: DataService,
     private _alert: AlertService,
-    private _router: Router
-  ) {
-  }
+    private _router: Router,
+    public dialog: MdDialog
+  ) { }
 
   ngOnInit() {
     this.getBucketList();
@@ -31,6 +34,9 @@ export class BucketlistsComponent implements OnInit {
     return this._dataService.get('/api/v1.0/bucketlist/')
       .subscribe(data => {
         this.bucketlist = data;
+        if (this.bucketlist['count'] == 0) {
+          this._alert.warning("You currently don't have any lists.")
+        }
       },
       error => {
         this._alert.error(error);
@@ -47,6 +53,9 @@ export class BucketlistsComponent implements OnInit {
     return this._dataService.get('/api/v1.0/bucketlist/?q=' + title)
       .subscribe(data => {
         this.bucketlist = data;
+        if (this.bucketlist['count'] == 0) {
+          this._alert.warning("You're search did not match any bucketlist")
+        }
       },
       error => {
         this._alert.error(error);
@@ -54,15 +63,18 @@ export class BucketlistsComponent implements OnInit {
   }
 
   paginate(num: number) {
-    if (num) {
+    if (num > 0) {
       this._paginate = true;
     } else {
       this._paginate = false;
     }
-    //search function
     return this._dataService.get('/api/v1.0/bucketlist/?limit=' + num)
       .subscribe(data => {
-        this.bucketlist = data;
+        if (num == 0) {
+          this._alert.error("The least items on the list must be one or greater");
+        }else{
+          this.bucketlist = data;
+        }
       },
       error => {
         this._alert.error(error);
@@ -70,12 +82,12 @@ export class BucketlistsComponent implements OnInit {
   }
 
   goTo(url: string) {
-    if(url) {
-    return this._dataService.get(url)
-      .subscribe(data =>
-      { this.bucketlist = data; },
-      error => { this._alert.error(error); }
-      );
+    if (url) {
+      return this._dataService.get(url)
+        .subscribe(data =>
+        { this.bucketlist = data; },
+        error => { this._alert.error(error); }
+        );
     }
   }
 
@@ -103,4 +115,10 @@ export class BucketlistsComponent implements OnInit {
       );
   }
 
+  openDialog() {
+    let dialogRef = this.dialog.open(BucketlistFormComponent, {
+      height: '400px',
+      width: '600px',
+    });
+  }
 }

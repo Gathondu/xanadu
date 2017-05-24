@@ -1,9 +1,4 @@
-
-.row {
-  margin-left: 100px;
-  margin-top: 20px;
-}
-.jumbotron {
-  margin-right: 350px;
-  padding-right: 0px;
+.container {
+  width: 400px;
+  height: 200px;
 }

@@ -1,10 +1,23 @@
 .header {
   color: white;
   font-size: 30px;
+  font-family: 'Indie Flower', cursive;
+  text-decoration: none;
 }
 
 .spacer {
   -webkit-box-flex: 1;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
+}
+
+.app {
+  background: #ffffff url("../assets/images/symphony.png") top right repeat;
+  height: 100%;
+}
+
+body {
+  margin: 20px auto;
+  background: transparent;
+  min-height: 620px;
 }

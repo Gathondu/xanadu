@@ -1,3 +1,13 @@
-.form {
-  margin-top: 5px;
+.register {
+  margin: 0 auto;
+  width: 400px;
+}
+h2 {
+  text-align: center;
+    font-size: 40px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+label {
+  padding-bottom: 10px;
 }

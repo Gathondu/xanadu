@@ -1,63 +1,85 @@
-.bucketlist {
-  margin: 5px;
-  padding: 5px;
-  padding-top: 15px;
-  padding-right: 15px;
-  padding-left: 15px;
+.paginate {
+  display: inline-block;
+  text-align: center;
 }
 
-.bucketlist:hover {
-  background-color: #cdd1d4;
+.paginate md-icon {
+  display: inline-block;
+  margin: 0 10px;
 }
 
-.section-buckets {
-  padding-left: 200px;
+.paginate span {
+  display: inline-block;
+  position: relative;
+  font-size: 30px;
+  top: -2px;
+  width: 100px;
 }
 
-.bucketlist h2 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.bucketlist h2 small {
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.bucketlist h3 small {
-  font-style: italic;
-  font-weight: bold;
+.new {
+  float: right;
+  margin-right: 10px;
+  margin-top: 2px;
 }
 
 .search {
+  float: right;
+  margin: 0 10px;
+}
+
+.page-list {
+  float: right;
+  margin: 0 10px;
+}
+
+.controls {
+  height: 50px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.list-content {
+  display: inline-block;
+  margin: 15px;
+}
+
+.list-content img {
+  width: 200px;
+  height: 200px;
+}
+
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.alert {
   position: absolute;
-  right: 60px;
+  top: 35px;
+  left: 350px;
+  width: 500px;
+  text-align: center;
+}
+md-card-actions {
+  text-align: center;
+}
+md-card-actions md-icon {
+  margin: 10px;
 }
 
-#add-btn {
-  position: absolute;
-  right: 330px;
-}
-
-.main-row {
-  margin-left: 35px;
-}
-
-#view-btn {
+.container {
+  background: none;
   margin-top: 10px;
-  margin-bottom: 10px;
 }
-.second {
-  margin-left: 35px;
+.sidenav {
+  width: 150px;
+  margin-left: -15px;
 }
-
-#page-box {
-  margin-right: 5px;
-}
-
-.paginate {
-  position: absolute;
-  right:60px;
-}
-
-

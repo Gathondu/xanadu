@@ -1,4 +1,4 @@
-<div class=" row-fluid col-md-6 col-md-offset-3 jumbotron">
+<div class="register">
   <h2><strong>REGISTER</strong></h2>
   <form class="form" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">

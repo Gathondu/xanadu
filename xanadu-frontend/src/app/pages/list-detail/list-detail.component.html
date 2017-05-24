@@ -41,7 +41,10 @@
         </md-card>
       </md-tab>
       <md-tab label="Items" class="items-tab">
-        <div *ngIf="bucketlist['count'] == 0 && !_search" class="col-lg-7 text-center alert alert-warning" role="alert">
+        <div *ngIf="bucketlist['count'] == 0 && !_search" class="col-lg-7 text-center alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
           <strong>Warning!</strong> You currently don't have any items.
         </div>
         <div *ngIf="bucketlist['count'] == 0 && _search" class="col-lg-7 text-center alert alert-warning" role="alert">
@@ -78,7 +81,7 @@
                     <md-card-title [routerLink]="['/bucketlist', listitem.bucketlist_id, 'items', listitem.id]"><strong>{{listitem.title | uppercase}}</strong></md-card-title>
                     <md-card-subtitle><small>({{listitem.content}})</small></md-card-subtitle>
                   </md-card-header>
-                  <img md-card-image src="../../../assets/images/house.jpg">
+                  <img md-card-sm-image src="../../../assets/images/house.jpg">
                   <md-card-content>
                     CREATED: {{listitem.date_created | date}}
                     <br> MODIFIED: {{listitem.date_modified | date}}
