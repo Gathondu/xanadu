@@ -28,7 +28,12 @@ export class ListDetailComponent implements OnInit {
 
   getList() {
     return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/')
-      .subscribe(data => this.bucketlist = data);
+      .subscribe(data => {
+        this.bucketlist = data;
+        if (this.bucketlist['count'] == 0) {
+          this._alert.warning("This list currently has no items.")
+        }
+      });
   }
 
   addItem() {
@@ -54,6 +59,19 @@ export class ListDetailComponent implements OnInit {
     this._router.navigate(['/bucketlist-add'], { queryParams: { 'list': JSON.stringify(params) } });
   }
 
+  removeList() {
+    this._dataService.delete('/api/v1.0/bucketlist/' + this.bucketlist['bucketlist_id'])
+      .subscribe(
+      data => {
+        this._alert.error('Bucketlist Deleted');
+        this.back();
+      },
+      error => {
+        this._alert.error(error);
+      }
+      );
+  }
+
   search(title: string) {
     if (title) {
       this._search = true;
@@ -64,26 +82,33 @@ export class ListDetailComponent implements OnInit {
     return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?q=' + title)
       .subscribe(data => {
         this.bucketlist = data;
+        if (this.bucketlist['count'] == 0) {
+          this._alert.warning("You're search did not match any item")
+        }
       },
       error => {
         this._alert.error(error);
       });
   }
+
   paginate(num: number) {
     if (num > 0) {
       this._paginate = true;
-      //paginate function
-      return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?limit=' + num)
-        .subscribe(data => {
-          this.bucketlist = data;
-        },
-        error => {
-          this._alert.error(error);
-        });
     } else {
       this._paginate = false;
-      this.getList();
     }
+    return this._dataService.get('/api/v1.0/bucketlist/' + `${this._route.snapshot.paramMap.get('id')}` + '/items/?limit=' + num)
+      .subscribe(data => {
+        if (num == 0) {
+          this._alert.error("The least items to display must be one or greater");
+          this.getList();
+        } else {
+          this.bucketlist = data;
+        }
+      },
+      error => {
+        this._alert.error(error);
+      });
   }
 
   goTo(url: string) {

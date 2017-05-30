@@ -1,55 +1,55 @@
 <div class="bucketlist">
   <md-sidenav-container class="container">
-  <md-sidenav #sidenav class="sidenav">
-    <!-- sidenav content -->
-    <button md-menu-item [routerLink]="'/home'">
+    <md-sidenav #sidenav class="sidenav">
+      <!-- sidenav content -->
+      <button md-menu-item [routerLink]="'/home'">
       <md-icon>arrow_back</md-icon>Home
     </button>
-    <button md-menu-item (click)="openDialog()">
+      <button md-menu-item (click)="openDialog()">
       <md-icon>add_circle</md-icon>New List
       </button>
-  </md-sidenav>
-  <div class="controls group">
-    <button class="sidenav-button" md-icon-button (click)="sidenav.open()">
+    </md-sidenav>
+    <div class="controls">
+      <button *ngIf="this.bucketlist['count'] > 0" class="sidenav-button" md-icon-button (click)="sidenav.open()">
       <md-icon>more_vert</md-icon>
     </button>
-    <div *ngIf="_paginate" class="paginate">
-      <md-icon (click)="goTo(bucketlist['previous'])">chevron_left</md-icon>
-      <span><h3>Page {{bucketlist['page']}}</h3></span>
-      <md-icon (click)="goTo(bucketlist['next'])">chevron_right</md-icon>
+      <div *ngIf="_paginate" class="paginate">
+        <md-icon mdTooltip="previous" (click)="goTo(bucketlist['previous'])">chevron_left</md-icon>
+        <span><h3>Page {{bucketlist['page']}}</h3></span>
+        <md-icon mdTooltip="next" (click)="goTo(bucketlist['next'])">chevron_right</md-icon>
+      </div>
+      <md-input-container class="search">
+        <md-placeholder>
+          <md-icon>search</md-icon>
+        </md-placeholder>
+        <input #searchBox mdInput (keyup)="search(searchBox.value)" mdTooltip="Search for specific lists">
+      </md-input-container>
+      <md-input-container class=" page-list ">
+        <input #page mdInput type="number" min="1" placeholder="Lists Per Page " (change)="paginate(page.value) " mdTooltip="The number of lists to be displayed">
+      </md-input-container>
+      <button (click)="openModal('list-add')" class="new" md-mini-fab mdTooltip="Add new list"><md-icon>add</md-icon></button>
     </div>
-    <md-input-container class="search">
-      <md-placeholder>
-        <md-icon>search</md-icon>
-      </md-placeholder>
-      <input #searchBox mdInput (keyup)="search(searchBox.value)" mdTooltip="Search for specific lists">
-    </md-input-container>
-    <md-input-container class=" page-list ">
-      <input #page mdInput type="number" min="1" placeholder="Lists Per Page " (change)="paginate(page.value) " mdTooltip="The number of lists to be displayed">
-    </md-input-container>
-    <button (click)="openDialog()" class="new" md-mini-fab mdTooltip="Add new list"><md-icon>add</md-icon></button>
-  </div>
-  <div class="list" *ngIf="bucketlist['count'] > 0">
-    <md-card *ngFor="let list of bucketlist['bucketlists']" class="list-content">
-      <md-card-header>
-        <md-card-title [routerLink]="['/bucketlist', list.id]">{{list.title | uppercase}}</md-card-title>
-      </md-card-header>
-      <img md-card-image src="../../../assets/images/bucketlist.jpg" alt="list picture">
-      <md-card-content>
-        <h2>{{list.description}}</h2>
-        <h3 *ngIf="list.items_count > 0"><small>Items in the list {{list.items_count}}</small></h3>
-        <h3 *ngIf="list.items_count == 0"><small>Empty list</small></h3>
-        <h3><small>CREATED: {{list.date_created | date}}</small></h3>
-        <h3><small>MODIFIED: {{list.date_modified | date}}</small></h3>
-      </md-card-content>
-      <md-card-actions>
-        <md-icon mdTooltip="View List" [routerLink]="['/bucketlist', list.id]">list</md-icon>
-        <md-icon mdTooltip="Edit List" (click)="editList(list)">mode_edit</md-icon>
-        <md-icon mdTooltip="Delete List" (click)="removeList(list.id)">delete_forever</md-icon>
-      </md-card-actions>
-    </md-card>
-  </div>
-  <div>
-  </div>
+    <div class="list" *ngIf="bucketlist['count'] > 0">
+      <md-card *ngFor="let list of bucketlist['bucketlists']" class="list-content">
+        <md-card-header>
+          <md-card-title [routerLink]="['/bucketlist', list.id]">{{list.title | uppercase}}</md-card-title>
+        </md-card-header>
+        <img md-card-image src="../../../assets/images/bucketlist.jpg" alt="list picture">
+        <md-card-content>
+          <h2>{{list.description}}</h2>
+          <h3 *ngIf="list.items_count > 0"><small>{{list.items_count}} items in the list</small></h3>
+          <h3 *ngIf="list.items_count == 0"><small>Empty list</small></h3>
+          <h3><small>CREATED: {{list.date_created | date}}</small></h3>
+          <h3><small>MODIFIED: {{list.date_modified | date}}</small></h3>
+        </md-card-content>
+        <md-card-actions>
+          <md-icon mdTooltip="View List" [routerLink]="['/bucketlist', list.id]">list</md-icon>
+          <md-icon mdTooltip="Edit List" (click)="editList(list)">mode_edit</md-icon>
+          <md-icon mdTooltip="Delete List" (click)="removeList(list.id)">delete_forever</md-icon>
+        </md-card-actions>
+      </md-card>
+    </div>
+    <div>
+    </div>
   </md-sidenav-container>
 </div>

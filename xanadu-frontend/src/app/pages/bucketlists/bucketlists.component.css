@@ -1,3 +1,4 @@
+  /*background: #673ab7;*/
 .paginate {
   display: inline-block;
   text-align: center;
@@ -51,22 +52,14 @@
 }
 
 .list-content img {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
 }
 
 .group:after {
   content: "";
   display: table;
   clear: both;
-}
-
-.alert {
-  position: absolute;
-  top: 35px;
-  left: 350px;
-  width: 500px;
-  text-align: center;
 }
 md-card-actions {
   text-align: center;

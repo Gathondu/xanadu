@@ -1,95 +1,94 @@
-.content-tab {
-  margin-left: 35px;
-  margin-top: -35px;
-  margin-bottom: 65px;
-}
-
 .container {
-  width: 100%;
-}
-
-.sidenav {
-  margin-left: -15px;
-  width: 200px;
+  background: none;
 }
 
 .sidenav-button {
-  margin-top: 15px;
-}
-
-.nav-btn {
-  margin-top: 5px;
-}
-
-.details {
-  margin-left: 50px;
-  padding-top: -20px;
-  font-size: 18px;
-}
-
-.title {
-  margin-left: 30px;
-}
-
-.spacer {
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-}
-
-.searchbox {
-  position: relative;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.slider {
-  float: right;
-  margin-right: 2%;
-}
-
-.alert {
-  margin-top: 10px;
+  display: inline-block;
+  float: left;
 }
 
 .list-details {
-  width: 400px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 50px;
+  width: 300px;
+  margin: 20px auto;
 }
-.grid {
+
+.list-details img {
+  width: 300px;
+  height: 300px;
+}
+
+md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
+  min-height: 100%;
+}
+
+md-card-actions {
+  text-align: center;
+}
+md-card-actions md-icon {
+  margin: 10px;
+}
+.paginate {
+  display: inline-block;
+  text-align: center;
+}
+
+.paginate md-icon {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.paginate span {
+  display: inline-block;
+  position: relative;
+  font-size: 30px;
+  top: -2px;
+  width: 100px;
+}
+
+.new {
+  float: right;
+  margin-right: 10px;
+  margin-top: 2px;
+}
+
+.search {
+  float: right;
+  margin: 0 10px;
+}
+
+.page-list {
+  float: right;
+  margin: 0 10px;
+}
+
+.controls {
+  height: 50px;
+  margin-top: 2px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   width: 90%;
-  margin-left: 30px;
-  margin-top: 68px;
-}
-.item {
-  margin-left: 10px;
+  margin: 0 auto;
 }
 
-#previous {
-  width: 10%;
+.list-content {
+  display: inline-block;
+  margin: 15px;
 }
 
-#next {
-  margin-left: 122px;
-  margin-top: -48px;
-  padding-left:90px;
-  position: absolute;
-  width: 13%;
+.list-content img {
+  width: 300px;
+  height: 300px;
 }
 
-.page-text {
-  margin-top: -39px;
-  position: absolute;
-  margin-left: 100px;
+.container {
+  background: none;
+  margin-top: 10px;
 }
-
-.grid-style {
-  width: 90%;
-  margin-left: 30px;
-}
-
-#search-box {
-  margin-top: 5px;
+.sidenav {
+  width: 150px;
+  margin-left: -15px;
 }
